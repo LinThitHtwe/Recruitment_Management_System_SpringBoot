@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Ace Data Systems</title>
+	<!-- plugins:css -->
+	<link rel="stylesheet" href="../../vendors/feather/feather.css">
+	<link rel="stylesheet" href="../../vendors/ti-icons/css/themify-icons.css">
+	<link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css">
+	<!-- endinject -->
+	<!-- Plugin css for this page -->
+	<!-- End plugin css for this page -->
+	<!-- inject:css -->
+	<link rel="stylesheet" href="../../css/vertical-layout-light/style.css">
+	<!-- endinject -->
+	<link rel="shortcut icon" type="icon/image" href="https://acedatasystems.com/wp-content/themes/acedata/shared/images/fav/favicon.ico">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+</head>
+<style>
+	.btn-forgot {
+		color: #adacac;
+		background-color: transparent;
+	}
+
+	.btn-forgot:hover {
+		color: black;
+	}
+
+	.spinner {
+		--t: 2500ms;
+		--animation: rotate var(--t) linear infinite;
+		--animation2: scale var(--t) linear infinite alternate;
+		position: relative;
+		width: 10rem;
+		height: 10rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		animation: var(--animation), var(--animation2);
+	}
+
+	.spinner::before,
+	.spinner::after {
+		content: '';
+		position: absolute;
+	}
+
+	.spinner::before {
+		inset: 0;
+		border: 3px solid turquoise;
+		border-radius: 50%;
+		mask-image: conic-gradient(transparent 10%, black);
+		animation: borderScale var(--t) linear infinite alternate;
+	}
+
+	.spinner::after {
+		--r: 45deg;
+		--scale: 2;
+		width: 20%;
+		height: 20%;
+		background: radial-gradient(circle at 30% 35%, white 3px, transparent 0),
+			radial-gradient(circle at 70% 35%, white 3px, transparent 0),
+			radial-gradient(circle at top center, white 6px, transparent 0),
+			turquoise;
+		background-position: 0 0, 0 0, 0 1.25rem;
+		top: 0;
+		translate: 0 -50%;
+		rotate: 45deg;
+		animation: var(--animation) reverse, var(--animation2);
+		border-radius: 20%;
+	}
+
+	@keyframes rotate {
+		to {
+			rotate: calc(360deg + var(--r, 0deg));
+
+		}
+
+	}
+
+	@keyframes scale {
+		to {
+			scale: var(--scale, 0.5);
+
+		}
+
+	}
+
+	@keyframes borderScale {
+		to {
+			border: 6pxsolidturquoise;
+
+		}
+	}
+
+	.form-group {
+		position: relative;
+	}
+
+	#exampleInputPassword1 {
+		padding-right: 40px;
+	}
+
+	#togglePassword {
+		font-size: 18px;
+		position: absolute;
+		right: 5px;
+		top: 50%;
+		transform: translateY(-50%);
+		cursor: pointer;
+		background-color: transparent;
+		border: none;
+	}
+	
+</style>
+
+<body>
+	<div class="container-scroller">
+		<div class="container-fluid page-body-wrapper full-page-wrapper">
+			<div class="content-wrapper d-flex align-items-center auth px-0">
+
+				<div class="row w-100 mx-0">
+					<div class="col-lg-4 mx-auto">
+						<div class="auth-form-light text-left py-5 px-4 px-sm-5">
+							<div class="brand-logo"
+								style="display: flex; justify-content: center; align-items: center;">
+								<img src="../../images/ACEDataSystemFull.jpg" alt="logo"
+									style="position: relative; margin: 0;">
+							</div>
+							<div class="error-message" th:if="${param.error}">
+								<h4 style="color: red">Check your email and password.</h4>
+							</div>
+
+							<div class="ban-message" th:if="${param.deny}">
+								<h4 style="color: red">Your Account has been Ban.</h4>
+							</div>
+							<div class="success-message" th:unless="${param.error}">
+								<div th:unless="${param.deny}">
+									<h4>Sign in to continue.</h4>
+								</div>
+							</div>
+							<form class="pt-3" th:action="@{/login}" method="POST">
+								<div class="form-group">
+									<input type="text" class="form-control form-control-md" name="username"
+										id="exampleInputEmail1" placeholder="Enter your email.">
+								</div>
+								<div class="form-group">
+								    <input type="password" class="form-control form-control-md" name="password" id="exampleInputPassword1" placeholder="Password">
+								    <span toggle="#exampleInputPassword1" class="fa fa-fw fa-eye field-icon toggle-password"></span> show-password
+								</div>
+								<div class="mt-3">
+									<input type="submit" value="Log in"
+										class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">
+								</div>
+								<div style="float:right">
+									
+									<button type="button" class="btn btn-forgot"
+										onclick="showForgotPasswordModal()">Forgot
+										password?</button>
+								</div>
+							</form>
+						</div>
+					</div>
+
+
+				</div>
+
+
+				<!-- modal for forgot password start -->
+				<div class="modal fade" id="forgotPasswordModal" tabindex="-1"
+					aria-labelledby="forgotPasswordModalLabel" aria-hidden="true" data-bs-backdrop="static">
+					<div class="modal-dialog modal-dialog-centered" style="max-width: 25rem;">
+						<div class="modal-content">
+							<div class="text-right">
+								<a type="button" class="btn btn-close" data-bs-dismiss="modal"
+									style="float: right;" aria-label="Close" onclick="clearEmailForm()">x</a>
+							</div>
+							<div class="modal-header">
+								<div class="text-left">
+									<div>
+										<h2 style="font-family: serif;">Reset Password</h2>
+									</div>
+								</div>
+							</div>
+							<div class="modal-body">
+								
+									<div class="form-group">
+										<form id="emailForm">
+											<div class="input-div">
+												<input type="email" class="form-control" id="email" name="email"
+													style="max-width: 100%;" placeholder="Enter your email.">
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+													onclick="clearEmailForm()">Cancel</button>
+												<button type="button" class="btn btn-primary"
+													onclick="getEmail()">Submit</button>
+											</div>
+										</form>
+									</div>
+								
+							</div>
+
+						</div>
+
+					</div>
+				</div>
+
+				<!-- modal for forgot password end -->
+
+				<!-- Modal for email validation fail start-->
+				<div class="modal fade" id="emailValidateFailModal" tabindex="-1"
+					aria-labelledby="emailValidateFailModalLabel" aria-hidden="true" data-bs-backdrop="static">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="emailValidateFailModalLabel">Error</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal"
+									aria-label="Close">x</button>
+							</div>
+							<div class="modal-body">
+								<p>
+									<span id="emailValidateFailPlaceholder"></span>
+								</p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+								<button type="button" class="btn btn-primary"
+									onclick="showForgotPasswordModal()">Retry</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Modal for email validation fail error end -->
+
+				<!-- Modal for reset email send request start-->
+				<div class="modal fade" id="resetEmailSendReqModal" tabindex="-1"
+					aria-labelledby="resetEmailSendReqModalLabel" aria-hidden="true" data-bs-backdrop="static">
+					<div class="modal-dialog modal-dialog-centered" style="max-width: 25rem;">
+						<div class="modal-content">
+							<div class="text-right">
+								<button type="button" class="btn-close btn-secondary" data-bs-dismiss="modal"
+									style="float: right;" aria-label="Close">x</button>
+							</div>
+							<div class="modal-header">
+								<div class=" text-left">
+									<div class="brand-logo">
+										<h2 style="font-family: serif;">Reset Password</h2>
+									</div>
+								</div>
+							</div>
+							<div class="modal-body">
+								<p>
+									<span id="emailValidateSuccessPlaceholder"></span>
+								</p>
+								<form id="sendResetMailForm">
+									<input type="email" id="validatedEmail" name="validatedEmail" hidden="true">
+								</form>
+								<button type="button" class="btn btn-primary" onclick="sendResetMail()">Send
+									Email</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Modal for reset email send request end-->
+
+				<!-- Modal for send reset email fail start-->
+				<div class="modal fade" id="sendResetMailFailModal" tabindex="-1"
+					aria-labelledby="sendResetMailFailModalLabel" aria-hidden="true" data-bs-backdrop="static">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="sendResetMailFailModalLabel">Error</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal"
+									aria-label="Close">x</button>
+							</div>
+							<div class="modal-body">
+								<p>
+									<span id="resetMailSendErrorPlaceholder"></span>
+								</p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+								<button type="button" class="btn btn-primary"
+									onclick="resendResetMail()">Resend</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Modal for send reset email fail error end -->
+
+				<!-- modal for enter reset token start -->
+				<div class="modal fade" id="enterResetTokenModal" tabindex="-1"
+					aria-labelledby="enterResetTokenModalLabel" aria-hidden="true" data-bs-backdrop="static">
+					<div class="modal-dialog modal-dialog-centered" style="max-width: 25rem;">
+						<div class="modal-content">
+							<div class="text-right">
+								<button type="button" class="btn-close btn-secondary" data-bs-dismiss="modal"
+									style="float: right;" aria-label="Close" onclick="clearResetTokenForm()">x</button>
+							</div>
+							<div class="modal-header">
+								<div class=" text-left">
+									<div class="brand-logo">
+										<h2 style="font-family: serif;">Reset Password</h2>
+									</div>
+								</div>
+							</div>
+							<div class="modal-body">
+								<div class="row">
+									<div class="form-group">
+										<form id="resetTokenForm">
+											<div class="input-div">
+												<input type="text" class="form-control" id="resetToken"
+													name="resetToken" style="max-width: 100%;" placeholder="Enter code">
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+													onclick="clearResetTokenForm()">Cancel</button>
+												<button type="button" class="btn btn-primary"
+													onclick="resendResetMail()">Resend</button>
+												<button type="button" class="btn btn-primary"
+													onclick="validateResetToken()">Submit</button>
+											</div>
+										</form>
+									</div>
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<!-- modal for enter reset token end -->
+
+				<!-- Modal for reset token validate error start-->
+				<div class="modal fade" id="resetTokenValidateFailModal" tabindex="-1"
+					aria-labelledby="resetTokenValidateFailModalLabel" aria-hidden="true" data-bs-backdrop="static">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="resetTokenValidateFailModalLabel">Error</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal"
+									aria-label="Close">x</button>
+							</div>
+							<div class="modal-body">
+								<p>
+									<span id="resetTokenValidateFailPlaceholder"></span>
+								</p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+								<button type="button" class="btn btn-primary"
+									onclick="retryTokenValidation()">Retry</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Modal for reset token validate error end -->
+
+				<!-- modal for reset password start -->
+				<div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="resetPasswordModalLabel"
+					aria-hidden="true" data-bs-backdrop="static">
+					<div class="modal-dialog modal-dialog-centered" style="max-width: 25rem;">
+						<div class="modal-content">
+							<div class="text-right">
+								<button type="button" class="btn-close btn-secondary" data-bs-dismiss="modal"
+									style="float: right;" aria-label="Close"
+									onclick="clearResetPasswordForm()">x</button>
+							</div>
+							<div class="modal-header">
+								<div class=" text-left">
+									<div class="brand-logo">
+										<h2 style="font-family: serif;">Reset Password</h2>
+									</div>
+								</div>
+							</div>
+							<div class="modal-body">
+								<div class="row">
+									<div class="form-group">
+										<form id="resetPasswordForm">
+											<input type="number" id="reset-id" name="reset-id" hidden="true">
+											<div class="input-div">
+												<input type="password" class="form-control" id="password"
+													name="password" style="max-width: 100%; margin-top: 10px"
+													placeholder="Enter Password">
+											</div>
+											<div class="input-div">
+												<input type="password" class="form-control" id="confirmPassword"
+													name="confirmPassword" style="max-width: 100%; margin-top: 10px"
+													placeholder="Enter Confirm Password">
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+													onclick="clearResetPasswordForm()">Cancel</button>
+												<button type="button" class="btn btn-primary"
+													onclick="resetPassword()">Submit</button>
+											</div>
+										</form>
+									</div>
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<!-- modal for reset password end -->
+
+				<!-- Modal for reset password success start -->
+				<div class="modal fade" id="resetPasswordSuccessModal" tabindex="-1"
+					aria-labelledby="resetPasswordSuccessModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="resetPasswordSuccessModalLabel">Password
+									Reset Success</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal"
+									aria-label="Close">x</button>
+							</div>
+							<div class="modal-body">
+								<p>Your password has been reset successfully!</p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Modal for reset password success end -->
+
+				<!-- Modal for reset password error start -->
+				<div class="modal fade" id="resetPasswordErrorModal" tabindex="-1"
+					aria-labelledby="resetPasswordSuccessModalLabel" aria-hidden="true" data-bs-backdrop="static">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="resetPasswordErrorModalLabel">Password
+									Reset Error</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal"
+									aria-label="Close">x</button>
+							</div>
+							<div class="modal-body">
+								<p>Sorry! Something went wrong when reseting your password.</p>
+							</div>
+							<div class="modal-footer">
+								<a href="" class="btn btn-primary" onclick="retryResetingPassword()">Retry</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Modal for add interview success end -->
+
+
+				<!-- Modal for loading start -->
+				<div class="modal fade" id="mailLoadingModal" tabindex="-1" aria-labelledby="mailLoadingModalLabel"
+					aria-hidden="true" data-bs-backdrop="static">
+					<div class="modal-dialog">
+						<div class="modal-content"
+							style="display: flex; align-items: center; justify-content: center; background-color: transparent; border: none">
+							<div class="modal-body">
+								<div class="spinner"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Modal for loading end -->
+			</div>
+			<!-- content-wrapper ends -->
+		</div>
+		<!-- page-body-wrapper ends -->
+	</div>
+	<!-- container-scroller -->
+	<!-- plugins:js -->
+	<script>
+	 document.addEventListener('DOMContentLoaded', function() {
+	        const togglePassword = document.querySelector('.toggle-password');
+	        const passwordInput = document.querySelector('#exampleInputPassword1');
+
+	        togglePassword.addEventListener('click', function() {
+	            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+	            passwordInput.setAttribute('type', type);
+	            this.classList.toggle('fa-eye-slash');
+	        });
+	    });
+	</script>
+
+	<script src="../../vendors/js/vendor.bundle.base.js"></script>
+	<!-- endinject -->
+	<!-- Plugin js for this page -->
+	<!-- End plugin js for this page -->
+	<!-- inject:js -->
+	<script th:src="@{/javascripts/forgot-password.js}"></script>
+	<script src="../../js/off-canvas.js"></script>
+	<script src="../../js/hoverable-collapse.js"></script>
+	<script src="../../js/template.js"></script>
+	<script src="../../js/settings.js"></script>
+	<script src="../../js/todolist.js"></script>
+	<!-- endinject -->
+</body>
+
+</html>

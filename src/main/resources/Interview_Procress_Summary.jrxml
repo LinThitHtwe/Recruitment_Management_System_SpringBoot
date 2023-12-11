@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Interview_Procress_Summary" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0c75182c-7989-468d-9086-79d7b6e3f86a">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Interview_Procress"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+    DATE_FORMAT(v.created_date, '%d/%m/%Y') AS from_date,
+    DATE_FORMAT(v.due_date, '%d/%m/%Y') AS to_date,
+    p.name AS position_name,
+    COUNT(c.vacancy_id) AS total_received_candidate,
+    COALESCE(CAST(SUM(c.is_employ = 1) AS SIGNED), 0) AS offer_mail,
+    COALESCE(CAST(SUM(c.is_mail_sent = 1) AS SIGNED), 0) AS accepted_mail,
+    SUM(
+        CASE
+            WHEN last_interview.status = 'Passed' THEN 1
+            ELSE 0
+        END
+    ) AS passed_interview_count,
+    SUM(
+        CASE
+            WHEN last_interview.status = 'Pending' THEN 1
+            ELSE 0
+        END
+    ) AS pending_interview_count,
+    SUM(
+        CASE
+            WHEN last_interview.status = 'Cancel' THEN 1
+            ELSE 0
+        END
+    ) AS cancel_interview_count,
+    SUM(
+        CASE
+            WHEN last_interview.status = 'Reached' THEN 1
+            ELSE 0
+        END
+    ) AS reached_interview_count,
+    SUM(
+        CASE
+            WHEN last_interview.status IN ('Passed', 'Pending', 'Cancel') THEN 1
+            ELSE 0
+        END
+    ) AS interviewed_candidate,
+    COUNT(c.vacancy_id) - SUM(
+        CASE
+            WHEN last_interview.status IN ('Passed', 'Pending', 'Cancel') THEN 1
+            ELSE 0
+        END
+    ) AS left_to_view
+FROM
+    vacancy v
+LEFT JOIN
+    position p ON v.position_id = p.id
+LEFT JOIN
+    candidate c ON v.id = c.vacancy_id
+LEFT JOIN (
+    SELECT
+        ci.candidate_id,
+        ci.status
+    FROM
+        candidate_interview ci
+    WHERE
+        (ci.candidate_id, ci.id) IN (
+            SELECT
+                candidate_id,
+                MAX(id) AS max_id
+            FROM
+                candidate_interview
+            GROUP BY
+                candidate_id
+        )
+) AS last_interview ON c.id = last_interview.candidate_id
+GROUP BY
+    v.id
+ORDER BY
+    v.created_date;]]>
+	</queryString>
+	<field name="from_date" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="from_date"/>
+		<property name="com.jaspersoft.studio.field.label" value="from_date"/>
+	</field>
+	<field name="to_date" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="to_date"/>
+		<property name="com.jaspersoft.studio.field.label" value="to_date"/>
+	</field>
+	<field name="left_to_view" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="left_to_view"/>
+		<property name="com.jaspersoft.studio.field.label" value="left_to_view"/>
+	</field>
+	<field name="position_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="name"/>
+		<property name="com.jaspersoft.studio.field.label" value="position_name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="position"/>
+	</field>
+	<field name="total_received_candidate" class="java.math.BigInteger">
+		<property name="com.jaspersoft.studio.field.name" value="total_received_candidate"/>
+		<property name="com.jaspersoft.studio.field.label" value="total_received_candidate"/>
+	</field>
+	<field name="offer_mail" class="java.math.BigInteger">
+		<property name="com.jaspersoft.studio.field.name" value="offer_mail"/>
+		<property name="com.jaspersoft.studio.field.label" value="offer_mail"/>
+	</field>
+	<field name="accepted_mail" class="java.math.BigInteger">
+		<property name="com.jaspersoft.studio.field.name" value="accepted_mail"/>
+		<property name="com.jaspersoft.studio.field.label" value="accepted_mail"/>
+	</field>
+	<field name="passed_interview_count" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="passed_interview_count"/>
+		<property name="com.jaspersoft.studio.field.label" value="passed_interview_count"/>
+	</field>
+	<field name="pending_interview_count" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="pending_interview_count"/>
+		<property name="com.jaspersoft.studio.field.label" value="pending_interview_count"/>
+	</field>
+	<field name="cancel_interview_count" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="cancel_interview_count"/>
+		<property name="com.jaspersoft.studio.field.label" value="cancel_interview_count"/>
+	</field>
+	<field name="reached_interview_count" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="reached_interview_count"/>
+		<property name="com.jaspersoft.studio.field.label" value="reached_interview_count"/>
+	</field>
+	<field name="interviewed_candidate" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="interviewed_candidate"/>
+		<property name="com.jaspersoft.studio.field.label" value="interviewed_candidate"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="49" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="752" height="49" uuid="f58aa385-df57-4554-86da-79bc77d3061d"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Interview Procress Summary Report]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="4" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="43" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="72" height="42" forecolor="#FFFFFF" backcolor="#321180" uuid="64ca7aad-dc10-4681-8c1b-56678c0baf28"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[From Date
+(dd/mm/yyyy)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="72" y="0" width="68" height="42" forecolor="#FFFFFF" backcolor="#321180" uuid="254a3119-d3ef-44cf-a36a-ca56113a08c0"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[To Date
+(dd/mm/yyyy)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="140" y="0" width="68" height="42" forecolor="#FFFFFF" backcolor="#321180" uuid="b1ff3004-d2ca-4938-b560-dde4bbda423d"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Vacant Position]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="208" y="0" width="68" height="42" forecolor="#FFFFFF" backcolor="#321180" uuid="42d7da13-5ff1-4099-ba93-200338c60fc9"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Total Received Candidates]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="276" y="0" width="68" height="42" forecolor="#FFFFFF" backcolor="#321180" uuid="63be50a8-7a16-4975-b8b1-bf409e912bd0"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Interview Candidates]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="344" y="0" width="68" height="42" forecolor="#FFFFFF" backcolor="#321180" uuid="00cf4dd4-3915-41d1-ba9f-a5b1666ac45d"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Passed Candidates]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="412" y="0" width="68" height="42" forecolor="#FFFFFF" backcolor="#321180" uuid="6d1e99fd-5dc1-419d-aff7-eeaa08c95bc8"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Pending Candidates]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="480" y="0" width="68" height="42" forecolor="#FFFFFF" backcolor="#321180" uuid="682403b1-60f6-4383-8acb-f2d9c355e0b5"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Cancel Candidates]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="548" y="0" width="68" height="42" forecolor="#FFFFFF" backcolor="#321180" uuid="7bb0d61d-74bd-4a92-b814-66c552bba5e7"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Not Interview Candidates]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="616" y="0" width="68" height="42" forecolor="#FFFFFF" backcolor="#321180" uuid="b6e406a1-ffed-4654-9f53-2fe5f724947c"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Offer Mail Letter]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="684" y="0" width="68" height="42" forecolor="#FFFFFF" backcolor="#321180" uuid="21e82f50-3832-4552-ae1a-18b0a69aed28"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Accepted Candidates]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="72" height="30" uuid="b3aeac18-3228-4b55-9074-f002c69d6cc3"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{from_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="72" y="0" width="68" height="30" uuid="f74e7557-c400-4c08-b49b-0df6afa22ea3"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{to_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="684" y="0" width="68" height="30" uuid="5b8ba599-4999-4bef-8743-7aa72d791144"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{accepted_mail}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="276" y="0" width="68" height="30" uuid="ff3af904-0f23-4a11-82bf-a862874d6015"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{interviewed_candidate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="208" y="0" width="68" height="30" uuid="71eaf558-dbfb-4d1c-a0ca-f0bf2395ab99"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_received_candidate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="140" y="0" width="68" height="30" uuid="df290b96-d36f-4904-b6ca-45887dbe5898"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{position_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="344" y="0" width="68" height="30" uuid="ced43bcb-d7d5-4b72-be32-fdc6975aea6b"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{passed_interview_count}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="412" y="0" width="68" height="30" uuid="2885d01a-0d28-4ed8-a1bb-ba7ab8a706ba"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pending_interview_count}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="480" y="0" width="68" height="30" uuid="eff10816-b363-48ff-a74b-89b265d86d2e"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cancel_interview_count}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="616" y="0" width="68" height="30" uuid="c4f1b5d3-abca-4366-bde5-61bb2a8b2e33"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{offer_mail}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="548" y="0" width="68" height="30" uuid="18ee8902-4f61-4e88-b05a-aa0f112f2afd"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{left_to_view}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

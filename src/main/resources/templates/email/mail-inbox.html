@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Mail Inbox</title>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" th:href="@{/vendors/feather/feather.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet" th:href="@{/vendors/css/vendor.bundle.base.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet" type="text/css"
+	href="@{/js/select.dataTables.min.css}">
+<link rel="stylesheet" th:href="@{/css/vertical-layout-light/style.css}">
+<link rel="shortcut icon" th:href="@{/images/Ace_Favicon.png}" />
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+	crossorigin="anonymous">
+	<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+	crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+<style>
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+td {
+	padding: 10px;
+	border: 1px solid #ccc;
+}
+
+.fixed-width {
+	width: 200px; /* Set your desired fixed width */
+}
+</style>
+</head>
+
+<body>
+	<div class="container-scroller">
+		<div th:replace="fragments/topbar :: topbar"></div>
+		<div class="container-fluid page-body-wrapper">
+			<div th:replace="fragments/sidebar :: sidebar"></div>
+			<div class="main-panel">
+				<div class="content-wrapper">
+					<div class="card-body">
+						<div class="d-flex align-items-center justify-content-between"
+							style="padding-bottom: 15px">
+							<h4 class="card-title">Mail Inbox</h4>
+						</div>
+						<th:block th:unless="${noMailMsg == null}">
+							<p th:text="${noMailMsg}" style="padding-top: 6%;"></p>
+						</th:block>
+						<th:block th:if="${noMailMsg == null}">
+							<div class="table-responsive">
+								<table class="table table-hover" id="emailTable"
+									style="width: 100%;">
+									<thead>
+										<tr>
+											<th>Received Datetime</th>
+											<th>Sender</th>
+											<th>Subject</th>
+											<th>Attachment</th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody>
+
+										<tr th:each="emailInbox : ${emailInboxList}" class="email-row">
+										<tr th:each="emailInbox : ${emailInboxList}" class="email-row">
+											<td th:text="${emailInbox.sentDate}" class="fixed-width"></td>
+											<td th:text="${emailInbox.sender}" class="fixed-width"></td>
+											<td th:text="${emailInbox.subject}" class="fixed-width"></td>
+											<td th:text="${emailInbox.attachmentCount}"
+												class="fixed-width"></td>
+											<td><label style="display: none;"
+												th:text="${emailInbox.body}"></label>
+												<button class="btn btn-sm btn-secondary email-button">See
+													Mail Body</button></td>
+										</tr>
+									</tbody>
+
+								</table>
+							</div>
+						</th:block>
+					</div>
+
+					<!-- Modal for email body start -->
+					<div class="modal fade" id="emailBodyModal" tabindex="-1"
+						aria-labelledby="emailBodyModalLabel" aria-hidden="true"
+						style="width: 100%">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="emailBodyModalLabel">Email
+										Body</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal"
+										aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									<p id="bodyPlaceholder"></p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-primary"
+										data-bs-dismiss="modal">Close</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Modal for email body end -->
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<script th:src="@{/vendors/js/vendor.bundle.base.js}"></script>
+	<script th:src="@{/vendors/chart.js/Chart.min.js}"></script>
+	<script th:src="@{/vendors/datatables.net/jquery.dataTables.js}"></script>
+	<script
+		th:src="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.js}"></script>
+	<script th:src="@{/js/dataTables.select.min.js}"></script>
+	<script th:src="@{/js/off-canvas.js}"></script>
+	<script th:src="@{/js/hoverable-collapse.js}"></script>
+	<script th:src="@{/js/template.js}"></script>
+	<script th:src="@{/js/settings.js}"></script>
+	<script th:src="@{/js/todolist.js}"></script>
+	<script th:src="@{/js/dashboard.js}"></script>
+	<script th:src="@{/js/Chart.roundedBarCharts.js}"></script>
+	<script th:src="@{/javascripts/data-table-config.js}"></script>
+	<script th:src="@{/javascripts/mail-inbox.js}"></script>
+	<script th:src="@{/javascripts/web_socket.js}"></script>
+	<!-- SockJS -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+	<!-- Stomp -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+	<!-- Stomp -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+	<!-- SockJS -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+	<!-- Stomp -->
+	<script th:src="@{/javascripts/web_socket.js}"></script>
+
+</body>
+
+</html>

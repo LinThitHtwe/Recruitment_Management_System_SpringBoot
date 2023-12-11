@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Ace Data System</title>
+<!-- plugins:css -->
+<link rel="stylesheet" th:href="@{/vendors/feather/feather.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet" th:href="@{/vendors/css/vendor.bundle.base.css}">
+<!-- endinject -->
+<!-- Plugin css for this page -->
+<link rel="stylesheet"
+	th:href="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet" type="text/css"
+	href="@{/js/select.dataTables.min.css}">
+<!-- End plugin css for this page -->
+<!-- inject:css -->
+<link rel="stylesheet" th:href="@{/css/vertical-layout-light/style.css}">
+<!-- endinject -->
+<link rel="shortcut icon" th:href="@{/images/Ace_Favicon.png}" />
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+</head>
+
+<body>
+	<nav class="sidebar sidebar-offcanvas" id="sidebar"
+		th:fragment="sidebar">
+		<ul class="nav">
+			<li class="nav-item"
+				sec:authorize="hasAnyAuthority('Admin','Default-Admin','Senior-HR','Junior-HR')"><a
+				class="nav-link " th:href="@{/hr/dashboard}"> <i
+					class="bi bi-card-text menu-icon"></i> <span class="menu-title">Dashboard</span>
+			</a></li>
+
+			<li class="nav-item"
+				sec:authorize="hasAnyAuthority('Department-head','Interviewer')"><a
+				class="nav-link " th:href="@{/department/dashboard}"> <i
+					class="bi bi-card-text menu-icon"></i> <span class="menu-title">Dashboard</span>
+			</a></li>
+			<li class="nav-item"
+				sec:authorize="hasAnyAuthority('Admin','Default-Admin')"><a
+				class="nav-link " th:href="@{/admin/department-list}"> <i
+					class="bi bi-building menu-icon"></i> <span class="menu-title">Department</span>
+			</a></li>
+			<li class="nav-item"
+				sec:authorize="hasAnyAuthority('Admin','Junior-HR','Senior-HR','Default-Admin')"><a
+				class="nav-link " th:href="@{/hr/position-table}"> <i
+					class="bi bi-file-earmark-ppt menu-icon"></i> <span class="menu-title">Position</span>
+			</a></li>
+			<li class="nav-item"
+				sec:authorize="hasAnyAuthority('Admin','Default-Admin')"><a
+				class="nav-link " th:href="@{/admin/users}"> <i class="bi bi-people menu-icon"></i><span class="menu-title">User</span>
+			</a></li>
+			<li class="nav-item"
+				sec:authorize="hasAnyAuthority('Admin','Junior-HR','Senior-HR','Default-Admin')"><a
+				class="nav-link" data-toggle="collapse" href="#vacancy"
+				aria-expanded="false" aria-controls="vacancy"> <i
+					class="icon-paper menu-icon"></i> <span class="menu-title">Vacancy</span>
+					<i class="menu-arrow"></i>
+			</a>
+				<div class="collapse" id="vacancy">
+					<ul class="nav flex-column sub-menu">
+						<li class="nav-item"
+							sec:authorize="hasAnyAuthority('Admin','Junior-HR','Senior-HR','Default-Admin')"><a
+							class="nav-link" th:href="@{/hr/setup-add-vacancy}">Add
+								Vacancy</a></li>
+						<li class="nav-item"
+							sec:authorize="hasAnyAuthority('Admin','Junior-HR','Senior-HR','Default-Admin')"><a
+							class="nav-link" th:href="@{/hr/vacancy-list}">Vacancy List</a></li>
+					</ul>
+				</div></li>
+			<li class="nav-item" th:classappend="${hrCandidates == true ? 'active' : ''}"
+				sec:authorize="hasAnyAuthority('Admin','Junior-HR','Senior-HR','Default-Admin')"><a
+				class="nav-link " th:href="@{/hr/candidates/}"> <i
+					class="bi bi-people menu-icon"></i> <span class="menu-title">Candidate</span>
+			</a></li>
+
+			<li class="nav-item" th:classappend="${interviewerCandidates == true ? 'active' : ''}"
+				sec:authorize="hasAnyAuthority('Admin','Interviewer','Department-head','Default-Admin')"><a
+				class="nav-link " th:href="@{/interviewer/candidates/}"> <i
+					class="bi bi-person-check menu-icon"></i> <span class="menu-title"
+					style="font-size: 12px">Interview Candidate</span>
+			</a></li>
+			<li class="nav-item"
+				sec:authorize="hasAnyAuthority('Admin','Senior-HR','Default-Admin')"><a
+				class="nav-link " th:href="@{/senior-hr/canceled-candidates}"> <i
+					class="bi bi-person-slash menu-icon"></i> <span class="menu-title"
+					style="font-size: 12px">Canceled Candidate</span>
+			</a></li>
+
+			<li class="nav-item"
+				sec:authorize="hasAnyAuthority('Admin','Junior-HR','Senior-HR','Default-Admin')"><a
+				class="nav-link " th:href="@{/hr/interview-list}"> <i
+					class="bi bi-person-vcard menu-icon"></i> <span class="menu-title">Interview</span>
+			</a></li>
+			<li class="nav-item"
+				sec:authorize="hasAnyAuthority('Admin','Junior-HR','Senior-HR','Default-Admin')"><a
+				class="nav-link " th:href="@{/hr/mail-history}"> <i
+					class="bi bi-envelope menu-icon"></i> <span class="menu-title">Mail
+						History</span>
+			</a></li>
+			<li class="nav-item"
+				sec:authorize="hasAnyAuthority('Department-head')"><a
+				class="nav-link " th:href="@{/department-head/users}"> <i
+					class="bi bi-people menu-icon"></i> <span class="menu-title">Department
+						Employees</span>
+			</a></li>
+
+
+		</ul>
+	</nav>
+	
+	<!-- Stomp -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+	<!-- SockJS -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+	<!-- plugins:js -->
+	<script th:src="@{/vendors/js/vendor.bundle.base.js}"></script>
+	<!-- endinject -->
+	<!-- Plugin js for this page -->
+	<script th:src="@{/vendors/chart.js/Chart.min.js}"></script>
+	<script th:src="@{/vendors/datatables.net/jquery.dataTables.js}"></script>
+	<script
+		th:src="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.js}"></script>
+	<script th:src="@{/js/dataTables.select.min.js}"></script>
+
+	<!-- End plugin js for this page -->
+	<!-- inject:js -->
+	<script th:src="@{/js/off-canvas.js}"></script>
+	<script th:src="@{/js/hoverable-collapse.js}"></script>
+	<script th:src="@{/js/template.js}"></script>
+	<script th:src="@{/js/settings.js}"></script>
+	<script th:src="@{/js/todolist.js}"></script>
+	<script th:src="@{/javascripts/web_socket.js}"></script>
+	<!-- endinject -->
+	<!-- Custom js for this page-->
+	<script th:src="@{/js/dashboard.js}"></script>
+	<script th:src="@{/js/Chart.roundedBarCharts.js}"></script>
+	<script th:src="@{/javascripts/web_socket.js}"></script>
+	<script th:src="@{/javascripts/sidebar-active.js}"></script>
+	<!-- End custom js for this page-->
+</body>
+
+
+</html>

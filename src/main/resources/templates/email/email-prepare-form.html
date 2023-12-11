@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Email Prepare Form</title>
+<link href="/css/general/interview.css" rel="stylesheet">
+<link href="/css/general/virtual-select.min.css" rel="stylesheet">
+<link rel="stylesheet" th:href="@{/vendors/feather/feather.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet" th:href="@{/vendors/css/vendor.bundle.base.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.css}">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<link rel="stylesheet"
+	th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet" type="text/css"
+	href="@{/js/select.dataTables.min.css}">
+<link rel="stylesheet" th:href="@{/css/vertical-layout-light/style.css}">
+<link rel="shortcut icon" th:href="@{/images/Ace_Favicon.png}" />
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+	crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+<link rel="stylesheet"
+	th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css}">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+	crossorigin="anonymous"></script>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+	crossorigin="anonymous">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+	crossorigin="anonymous"></script>
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<style>
+.card {
+	width: 80%;
+}
+
+.attachment-minus-button {
+	color: red;
+}
+
+.attachment-minus-button:hover {
+	color: #820303;
+}
+
+.attachment-plus-button {
+	font-size: 18px;
+	color: #1eed02;
+}
+
+.attachment-plus-button:hover {
+	font-size: 18px;
+	color: #128c01;
+}
+
+.spinner {
+	--t: 2500ms;
+	--animation: rotate var(--t) linear infinite;
+	--animation2: scale var(--t) linear infinite alternate;
+	position: relative;
+	width: 10rem;
+	height: 10rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	animation: var(--animation), var(--animation2);
+}
+
+.spinner::before, .spinner::after {
+	content: '';
+	position: absolute;
+}
+
+.spinner::before {
+	inset: 0;
+	border: 3px solid turquoise;
+	border-radius: 50%;
+	mask-image: conic-gradient(transparent 10%, black);
+	animation: borderScale var(--t) linear infinite alternate;
+}
+
+.spinner::after {
+	--r: 45deg;
+	--scale: 2;
+	width: 20%;
+	height: 20%;
+	background: radial-gradient(circle at 30% 35%, white 3px, transparent 0),
+		radial-gradient(circle at 70% 35%, white 3px, transparent 0),
+		radial-gradient(circle at top center, white 6px, transparent 0),
+		turquoise;
+	background-position: 0 0, 0 0, 0 1.25rem;
+	top: 0;
+	translate: 0 -50%;
+	rotate: 45deg;
+	animation: var(--animation) reverse, var(--animation2);
+	border-radius: 20%;
+}
+
+@keyframes rotate {to { rotate:calc(360deg + var(--r, 0deg));
+	
+}
+
+}
+@keyframes scale {to { scale:var(--scale, 0.5);
+	
+}
+
+}
+@keyframes borderScale {to { border:6pxsolidturquoise;
+	
+}
+}
+</style>
+</head>
+
+<body>
+	<div class="container-scroller">
+		<div th:replace="fragments/topbar :: topbar"></div>
+		<div class="container-fluid page-body-wrapper">
+			<div th:replace="fragments/sidebar :: sidebar"></div>
+			<div class="main-panel">
+				<div class="content-wrapper">
+
+					<div class="card" style="margin-left: 10%; margin-right: 10%">
+						<div class="card-body">
+							<h1 class="text-center" th:if="${templateId == '3'}">In-person
+								Interview Invitation</h1>
+							<h1 class="text-center" th:if="${templateId == '4'}">Online
+								Interview Invitation</h1>
+							<h1 class="text-center" th:if="${templateId == '5'}">Job
+								Offer Mail</h1>
+							<!-- <div class="d-flex justify-content-center" id="button-wrap" style="float: right">
+								
+							</div> -->
+							<div class="formbold-form-wrapper">
+
+								<form action="" method="POST" id="emailPrepareForm">
+
+									<div class="formbold-form-step-1 active">
+										<input type="text" id="isRecalled" name="isRecalled"
+											th:value="${isRecalled}" style="display:none"> <input type="text"
+											id="vacancyId" name="vacancyId" th:value="${vacancyId}"
+											hidden="true"> <input type="text" id="templateId"
+											name="templateId" th:value="${templateId}" hidden="true">
+										<input type="number" id="candidate_id" name="candidate_id"
+											th:value="${candidate_id}" hidden="true"> <input
+											type="number" id="interview_id" name="interview_id"
+											th:value="${interview_id}" hidden="true">
+
+										<div class="row mb-3">
+											<div class="full-width-input col-6">
+												<b> To : </b> <input type="email" name="recipientAddress"
+													id="recipientAddress" th:value="${recipientAddress}"
+													placeholder="Enter recipient mail address"
+													class="formbold-form-input" readonly="true" />
+											</div>
+											<div class="full-width-input col-6">
+												<b> Subject : </b> <input type="text" name="subject"
+													id="subject" th:value="${subject}"
+													placeholder="Enter email subject"
+													class="formbold-form-input" />
+											</div>
+										</div>
+										<div class="row">
+											<div class="full-width-input col-6" id="ccContainer">
+												<label for="ccAddress" class="formbold-form-label"
+													style="font-weight: bolder;">CC addresses  <i
+													class="bi bi-plus-square-fill attachment-plus-button"
+													onclick="addCCField()"></i>
+												</label>
+												<div class="cc-field">
+													<input type="email" name="ccAddress" id="ccAddress"
+														placeholder="Enter cc mail" class="formbold-form-input" />
+													<i class="bi bi-x-square-fill attachment-minus-button"></i>
+												</div>
+
+											</div>
+
+
+
+											<div class="full-width-input col-6" id="attachmentContainer">
+												<label for="attachment" class="formbold-form-label"
+													style="font-weight: bolder;"> Attachments  <i
+													class="bi bi-plus-square-fill attachment-plus-button"
+													onclick="addAttachmentField()"></i></label>
+												<div class="attachment-field">
+													<input type="text" name="attachment" id="attachment"
+														placeholder="e.g.C:\Users\example.docx"
+														class="formbold-form-input" /> <i
+														class="bi bi-x-square-fill attachment-minus-button"></i>
+												</div>
+
+											</div>
+										</div>
+										<!-- Onsite interview -->
+										<div
+											th:style="${templateId == '3' or templateId == '4'} ? '' : 'display:none;'">
+											<div class="formbold-input-flex">
+
+
+												<div style="display: none">
+													<label for="appointmentDay" class="formbold-form-label">Interview
+														Appointment Day</label> <select id="appointmentDay"
+														name="appointmentDay" class="formbold-form-input">
+														<option value="Monday" selected>Monday</option>
+														<option value="Tuesday">Tuesday</option>
+														<option value="Wednesday">Wednesday</option>
+														<option value="Thursday">Thursday</option>
+														<option value="Friday">Friday</option>
+														<option value="Saturday">Saturday</option>
+														<option value="Sunday">Sunday</option>
+													</select>
+												</div>
+
+											</div>
+
+											<div class="row mb-3">
+												<div class="col-6">
+													<label for="appointmentStartTime"
+														class="formbold-form-label" style="font-weight: bolder;">
+														Appointment Start Time </label> <input type="time"
+														name="appointmentStartTime" id="appointmentStartTime"
+														class="formbold-form-input" />
+												</div>
+												<div class="col-6">
+													<label for="appointmentEndTime" class="formbold-form-label"
+														style="font-weight: bolder;">Appointment End Time
+													</label> <input type="time" name="appointmentEndTime"
+														id="appointmentEndTime" class="formbold-form-input" />
+												</div>
+											</div>
+											<div class="text-left mb-3">
+                        <label for="appointmentDate" class="formbold-form-label"
+                          style="font-weight: bolder;">Interview Appointment
+                          Date</label> <input type="date" name="appointmentDate"
+                          id="appointmentDate" class="formbold-form-input w-50"
+                          th:min="${minDate}"
+                          th:max="${maxDate != null ? maxDate : minDate}" />
+                      </div>
+
+										</div>
+
+										<!-- Online interview -->
+										<div th:style="${templateId == '4'} ? '' : 'display:none;'">
+											<div class="full-width-input">
+												<label for="zoomMeetingUrl" class="formbold-form-label"
+													style="font-weight: bolder;"> Zoom Meeting Url </label> <input
+													type="url" name="zoomMeetingUrl" id="zoomMeetingUrl"
+													placeholder="Enter zoom meeting url"
+													class="formbold-form-input" />
+											</div>
+
+											<div class="mt-3 row">
+
+												<div class="col-6">
+													<label for="zoomMeetingId" class="formbold-form-label"
+														style="font-weight: bolder;">Zoom Meeting ID</label> <input
+														type="text" name="zoomMeetingId" id="zoomMeetingId"
+														placeholder="Enter zoom meeting ID"
+														class="formbold-form-input" />
+
+												</div>
+
+												<div class="col-6">
+													<label for="zoomMeetingPasscode"
+														class="formbold-form-label" style="font-weight: bolder;">
+														Zoom Meeting Passcode </label> <input type="text"
+														name="zoomMeetingPasscode" id="zoomMeetingPasscode"
+														placeholder="Enter zoom meeting passcode"
+														class="formbold-form-input" />
+												</div>
+											</div>
+										</div>
+
+										<!-- Job Offer -->
+										<div th:style="${templateId == '5'} ? '' : 'display:none;'">
+											<div class="row mt-3">
+												<div class="full-width-input col-6">
+													<label for="joinedStartDate" class="formbold-form-label"
+														style="font-weight: bolder;"> Joined Start Date </label> <input
+														type="date" name="joinedStartDate" id="joinedStartDate"
+														class="formbold-form-input" />
+												</div>
+											</div>
+											<div class="formbold-input-flex mt-3">
+												<div>
+													<label for="basicPay" class="formbold-form-label"
+														style="font-weight: bolder;">Basic Pay(MMK)</label> <input
+														type="number" min=0 name="basicPay" id="basicPay"
+														class="formbold-form-input" />
+
+												</div>
+
+												<div>
+													<label for="projectAllowance" class="formbold-form-label"
+														style="font-weight: bolder;"> Project
+														Allowance(MMK) </label> <input type="number" min=0
+														name="projectAllowance" id="projectAllowance"
+														class="formbold-form-input" />
+												</div>
+											</div>
+
+											<div class="formbold-input-flex">
+												<div>
+													<label for="mealTransportAllowanceDay"
+														class="formbold-form-label" style="font-weight: bolder;">Meal
+														Transport Allowance Per Day(MMK)</label> <input type="number"
+														min=0 name="mealTransportAllowanceDay"
+														id="mealTransportAllowanceDay" class="formbold-form-input" />
+
+												</div>
+
+												<div>
+													<label for="mealTransportAllowanceMonth"
+														class="formbold-form-label" style="font-weight: bolder;">
+														Meal Transport Allowance Per Month(MMK) </label> <input
+														type="number" min=0 name="mealTransportAllowanceMonth"
+														id="mealTransportAllowanceMonth"
+														class="formbold-form-input" />
+												</div>
+											</div>
+
+											<div class="formbold-input-flex">
+												<div>
+													<label for="earnLeave" class="formbold-form-label"
+														style="font-weight: bolder;">Earn Leave(days)</label> <input
+														type="number" min=0 name="earnLeave" id="earnLeave"
+														class="formbold-form-input" />
+
+												</div>
+
+												<div>
+													<label for="casualLeave" class="formbold-form-label"
+														style="font-weight: bolder;"> Casual Leave(days) </label>
+													<input type="number" min=0 name="casualLeave"
+														id="casualLeave" class="formbold-form-input" />
+												</div>
+
+												<div>
+													<label for="medicalLeave" class="formbold-form-label"
+														style="font-weight: bolder;"> Medicatl Leave(days)
+													</label> <input type="number" min=0 name="medicalLeave"
+														id="medicalLeave" class="formbold-form-input" />
+												</div>
+											</div>
+
+										</div>
+									</div>
+
+									<div class="mt-4" id="button-wrap">
+										<button type="button" class="btn btn-warning btn-md"
+											style="width: 160px" onclick="validateCCAndAttachment()">
+											<i class="fa-solid fa-wrench"></i> Customize Mail
+										</button>
+										<button type="button" class="btn btn-info btn-md"
+											style="width: 160px" onclick="showDraft()">
+											<i class="fa-solid fa-envelope-open-text"></i> See Draft
+										</button>
+
+
+									</div>
+
+									<button type="button" class="btn btn-secondary btn-sm w-25"
+										id="back-email">
+										<i class="fa-solid fa-arrow-right-to-bracket"></i> Back
+									</button>
+									<button type="button" class="btn btn-primary btn-sm w-25"
+										style="float: right;"
+										onclick="validateAndShowConfirmationBox(event)">
+										<i class="fa-regular fa-paper-plane"></i> Sent
+									</button>
+
+								</form>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- Modal for email draft start -->
+					<div class="modal fade" id="emailDraftModal" tabindex="-1"
+						aria-labelledby="emailDraftModalLabel" aria-hidden="true">
+						<div class="modal-dialog" style="width: 600px">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="emailDraftModalLabel">Email
+										Body Draft</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal"
+										aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									<p id="bodyPlaceholder"></p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-primary"
+										data-bs-dismiss="modal">Close</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Modal for email draft end -->
+
+					<!-- Modal for send mail confirmation start-->
+					<div class="modal fade" id="mailConfirmationModal" tabindex="-1"
+						aria-labelledby="mailConfirmationModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="mailConfirmationModalLabel">Confirmation</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal"
+										aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									<p>Are you sure you want to send the mail?</p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary"
+										data-bs-dismiss="modal">No</button>
+									<button type="button" class="btn btn-primary"
+										onclick="sendMail()" data-interview-id="">Yes</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Modal for send mail confirmation end -->
+
+					<!-- Modal for loading start -->
+					<div class="modal fade" id="mailLoadingModal" tabindex="-1"
+						aria-labelledby="mailLoadingModalLabel" aria-hidden="true"
+						data-bs-backdrop="static">
+						<div class="modal-dialog">
+							<div class="modal-content"
+								style="display: flex; align-items: center; justify-content: center; background-color: transparent; border: none">
+								<div class="modal-body">
+									<div class="spinner"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Modal for loading end -->
+
+					<!-- Modal for send mail success start -->
+					<div class="modal fade" id="sendMailSuccessModal" tabindex="-1"
+						aria-labelledby="sendMailSuccessModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="sendMailSuccessModalLabel">Email
+										send Success</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal"
+										aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									<p>Email sent successfully!</p>
+								</div>
+								<div class="modal-footer">
+									<a href="/hr/dashboard" class="btn btn-primary">OK</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Modal for send mail success end -->
+
+					<!-- Modal for send mail error start-->
+					<div class="modal fade" id="mailSendErrorModal" tabindex="-1"
+						aria-labelledby="mailSendErrorModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="mailSendErrorModalLabel">Error</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal"
+										aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									<p>
+										<span id="errorPlaceholder"></span>
+									</p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary"
+										data-bs-dismiss="modal">Back</button>
+									<button type="button" class="btn btn-primary"
+										onclick="sendMail()" data-interview-id="">Resend</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Modal for send mail error end -->
+
+					<!-- Modal for attachment or email invalid error start -->
+					<div class="modal fade" id="invalidAttachmentEmailModal"
+						tabindex="-1" aria-labelledby="invalidAttachmentEmailModalLabel"
+						aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="invalidAttachmentEmailModalLabel">Error</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal"
+										aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									<p>
+										<span id="invalidEmailAttachmentPlaceholder"></span>
+									</p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary"
+										data-bs-dismiss="modal">OK</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Modal for attachment or email invalid error end -->
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		$(document).ready(function() {
+			$("#back-email").click(function() {
+				history.back();
+			});
+		});
+	</script>
+	<script th:src="@{/javascripts/email-preparation.js}"></script>
+	<script th:src="@{/vendors/js/vendor.bundle.base.js}"></script>
+	<script th:src="@{/vendors/chart.js/Chart.min.js}"></script>
+	<script th:src="@{/vendors/datatables.net/jquery.dataTables.js}"></script>
+	<script
+		th:src="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.js}"></script>
+	<script th:src="@{/js/dataTables.select.min.js}"></script>
+	<script th:src="@{/js/off-canvas.js}"></script>
+	<script th:src="@{/js/hoverable-collapse.js}"></script>
+	<script th:src="@{/js/template.js}"></script>
+	<script th:src="@{/js/settings.js}"></script>
+	<script th:src="@{/js/todolist.js}"></script>
+	<script th:src="@{/js/dashboard.js}"></script>
+	<script th:src="@{/js/Chart.roundedBarCharts.js}"></script>
+	<!-- Stomp -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+	<!-- SockJS -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+	<!-- Stomp -->
+	<script th:src="@{/javascripts/web_socket.js}"></script>
+
+
+</body>
+
+</html>

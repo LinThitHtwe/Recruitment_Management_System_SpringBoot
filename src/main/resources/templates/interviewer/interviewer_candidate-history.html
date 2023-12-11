@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Candidate Interview History</title>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="/css/general/interview.css" rel="stylesheet">
+<link href="/css/general/virtual-select.min.css" rel="stylesheet">
+<link rel="stylesheet" th:href="@{/vendors/feather/feather.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet" th:href="@{/vendors/css/vendor.bundle.base.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet" type="text/css"
+	href="@{/js/select.dataTables.min.css}">
+<link rel="stylesheet" th:href="@{/css/vertical-layout-light/style.css}">
+<link rel="shortcut icon" th:href="@{/images/Ace_Favicon.png}" />
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+	crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+	crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+	<div class="container-scroller">
+		<div th:replace="fragments/topbar :: topbar"></div>
+		<div class="page-body-wrapper">
+			<div th:replace="fragments/sidebar :: sidebar"></div>
+			<div class="main-panel">
+				<h2 th:inline="text">[[${candidateName}]]'s History</h2>
+				<div th:if="${candidateInterviewLists.empty}">
+					<p>No History for this candidate yet.</p>
+				</div>
+				<div id="interviewContainer" th:if="${candidateInterviewLists}">
+					<h2>Interview Status History</h2>
+
+					<p th:if="${candidateInterviewLists.size() > 0}">
+						Email Status: <span th:text="${candidateInterviewLists[0].status}"></span>
+					</p>
+					<hr th:if="${candidateInterviewLists.size() > 0}" />
+
+					<div th:each="interviewItem, index : ${candidateInterviewLists}"
+						th:unless="${index.index == 0}">
+						<p>
+							Interview Date: <span th:text="${interviewItem.interviewDate}"></span>
+						</p>
+						<p>
+							Interview Status: <span th:text="${interviewItem.status}"></span>
+						</p>
+						<p>
+							Interviewers: <span th:text="${interviewItem.changeStatusBy}"></span>
+						</p>
+						<p>
+							Interviewers: <span th:text="${interviewItem.interviewers}"></span>
+						</p>
+						<hr />
+					</div>
+
+					<button type="button" class="btn btn-secondary" id="back-email"
+						style="width: 10%"> Back</button>
+				</div>
+
+
+
+
+			</div>
+		</div>
+	</div>
+	<script>
+		$(document).ready(function() {
+			$("#back-email").click(function() {
+				history.back();
+			});
+		});
+	</script>
+	<script th:src="@{/vendors/js/vendor.bundle.base.js}"></script>
+	<!-- endinject -->
+	<!-- Plugin js for this page -->
+	<script th:src="@{/vendors/chart.js/Chart.min.js}"></script>
+	<script th:src="@{/vendors/datatables.net/jquery.dataTables.js}"></script>
+	<script
+		th:src="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.js}"></script>
+	<script th:src="@{/js/dataTables.select.min.js}"></script>
+
+	<!-- End plugin js for this page -->
+	<!-- inject:js -->
+	<script th:src="@{/js/off-canvas.js}"></script>
+	<script th:src="@{/js/hoverable-collapse.js}"></script>
+	<script th:src="@{/js/template.js}"></script>
+	<script th:src="@{/js/settings.js}"></script>
+	<script th:src="@{/js/todolist.js}"></script>
+	<!-- Stomp -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+	<!-- SockJS -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+	<!-- Stomp -->
+	<script th:src="@{/javascripts/web_socket.js}"></script>
+	<!-- endinject -->
+	<!-- Custom js for this page-->
+	<script th:src="@{/js/dashboard.js}"></script>
+	<script th:src="@{/js/Chart.roundedBarCharts.js}"></script>
+</body>
+</html>

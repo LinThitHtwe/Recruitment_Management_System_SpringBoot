@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Vacancy Info</title>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- plugins:css -->
+<link rel="stylesheet" th:href="@{/vendors/feather/feather.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet" th:href="@{/vendors/css/vendor.bundle.base.css}">
+<!-- endinject -->
+<!-- Plugin css for this page -->
+<link rel="stylesheet"
+	th:href="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<link rel="stylesheet" type="text/css"
+	href="@{/js/select.dataTables.min.css}">
+<!-- End plugin css for this page -->
+<!-- inject:css -->
+<link rel="stylesheet" th:href="@{/css/vertical-layout-light/style.css}">
+<!-- endinject -->
+<link rel="shortcut icon" th:href="@{/images/Ace_Favicon.png}" />
+</head>
+
+<style>
+body {
+	background-color: #F5F7FF;
+}
+
+.auth-form-light {
+	background-color: #FFFFFF;
+	margin: 0 auto;
+	padding: 40px;
+	max-width: 500px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+	font-weight: bold;
+}
+
+#description, #responsibilities, #requirements, #preferences {
+	height: auto;
+	transition: height 0.2s;
+	resize: none;
+}
+
+.expandable-textarea {
+	overflow: hidden;
+	resize: none;
+	border: none;
+	background-color: transparent;
+}
+
+.no-background {
+	background-color: transparent !important;
+}
+</style>
+
+<body>
+	<div class="container-scroller">
+		<div th:replace="fragments/topbar :: topbar"></div>
+		<div class="container-fluid page-body-wrapper">
+			<div th:replace="fragments/sidebar :: sidebar"></div>
+			<div class="main-panel">
+				<div class="content-wrapper">
+					<div class="card">
+						<div class="card-body">
+							<h1 class="card-title">Vacancy Information</h1>
+							<p class="card-description"></p>
+							<form class="forms-sample row">
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label for="position">Position</label>
+										<p id="position" th:text="*{vacancyInfo.position.name}"></p>
+									</div>
+									<div class="form-group">
+										<label for="count">Required Vacancies</label>
+										<p id="count" th:text="*{vacancyInfo.count + ' Posts'}"></p>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label for="department">Department</label>
+										<p id="department" th:text="*{vacancyInfo.department.name}"></p>
+									</div>
+									<div class="form-group"></div>
+								</div>
+								<div class="form-group col-md-12">
+									<label for="description">Job Description</label>
+									<p id="description" th:text="*{vacancyInfo.description}"></p>
+								</div>
+								<div class="form-group col-md-12">
+									<label for="responsibilities">Job Responsibilities</label>
+									<textarea
+										class="form-control expandable-textarea no-background"
+										th:field="*{vacancyInfo.responsibility}" id="responsibilities"
+										disabled></textarea>
+								</div>
+								<div class="form-group col-md-12">
+									<label for="requirement">Job Requirements</label>
+									<textarea
+										class="form-control expandable-textarea no-background"
+										th:field="*{vacancyInfo.requirement}" id="requirement"
+										disabled></textarea>
+								</div>
+								<div class="form-group col-md-12">
+									<label for="preference">Preferences</label>
+									<textarea
+										class="form-control expandable-textarea no-background"
+										th:field="*{vacancyInfo.preference}" id="preference" disabled></textarea>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label for="working-day">Working Day</label>
+										<p id="working-day"
+											th:text="*{vacancyInfo.startWorkingDay +' ~ '+ vacancyInfo.endWorkingDay}"></p>
+									</div>
+									<div class="form-group">
+										<label for="salary">Salary</label>
+										<p id="salary" th:text="*{vacancyInfo.salary}"></p>
+									</div>
+									<div class="form-group">
+										<label for="type">Job Type</label>
+										<p id="type" th:text="*{vacancyInfo.type}"></p>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label for="working-hour">Working Hours</label>
+										<p id="working-hour"
+											th:text="*{vacancyInfo.startWorkingHour}+ ' ~ ' + *{vacancyInfo.endWorkingHour}"></p>
+									</div>
+									<div class="form-group">
+										<label for="location">Job Location</label>
+										<p id="location" th:text="*{vacancyInfo.department.address}"></p>
+									</div>
+									<div class="form-group">
+										<label for="duration">Duration</label>
+										<p
+											th:text="*{' ('+vacancyInfo.createdDate +' ~ '+vacancyInfo.dueDate}+')'"></p>
+									</div>
+								</div>
+								<div class="form-group col-md-12 text-right">
+									<a class="btn btn-md btn-secondary"
+										th:href="@{/hr/vacancy-list}">Back</a>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- main panel end-->
+		</div>
+	</div>
+	<script>
+		function autoExpandTextarea() {
+			var textareas = document
+					.getElementsByClassName('expandable-textarea');
+
+			for (var i = 0; i < textareas.length; i++) {
+				textareas[i].style.height = 'auto';
+				textareas[i].style.height = textareas[i].scrollHeight + 'px';
+			}
+		}
+
+		function setupAutoExpand() {
+			autoExpandTextarea();
+
+			var textareas = document
+					.getElementsByClassName('expandable-textarea');
+
+			for (var i = 0; i < textareas.length; i++) {
+				textareas[i].addEventListener('input', autoExpandTextarea);
+			}
+		}
+
+		// Call the function initially to set the proper heights
+		setupAutoExpand();
+	</script>
+	<!-- plugins:js -->
+	<script th:src="@{/vendors/js/vendor.bundle.base.js}"></script>
+	<!-- endinject -->
+	<!-- Plugin js for this page -->
+	<script th:src="@{/vendors/chart.js/Chart.min.js}"></script>
+	<script th:src="@{/vendors/datatables.net/jquery.dataTables.js}"></script>
+	<script
+		th:src="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.js}"></script>
+	<script th:src="@{/js/dataTables.select.min.js}"></script>
+	<!-- End plugin js for this page -->
+	<!-- inject:js -->
+	<script th:src="@{/js/off-canvas.js}"></script>
+	<script th:src="@{/js/hoverable-collapse.js}"></script>
+	<script th:src="@{/js/template.js}"></script>
+	<script th:src="@{/js/settings.js}"></script>
+	<script th:src="@{/js/todolist.js}"></script>
+	<!-- endinject -->
+	<!-- Custom js for this page-->
+	<script th:src="@{/js/dashboard.js}"></script>
+	<script th:src="@{/js/Chart.roundedBarCharts.js}"></script>
+	<script th:src="@{/javascripts/vacancy.js}"></script>
+	<!-- End custom js for this page-->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+	<!-- Stomp -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<!-- SockJS -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+	<!-- Stomp -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+	<script th:src="@{/javascripts/web_socket.js}"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+		integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+		crossorigin="anonymous"></script>
+</body>
+
+</html>

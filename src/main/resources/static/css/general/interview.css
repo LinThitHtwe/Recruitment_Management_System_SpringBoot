@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+            * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+            }
+            body {
+              font-family: "Inter", sans-serif;
+              background-color: #F5F7FF;
+            }
+            
+             .auth-form-light {
+	          background-color: #FFFFFF;
+	          margin: 0 auto;
+	          padding: 40px;
+	          max-width: 500px;
+	          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+             }
+            .formbold-main-wrapper {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              padding: 25px;
+              padding-top:10px;
+            }
+          
+            .formbold-form-wrapper {
+              margin: 0 auto;
+              max-width: 550px;
+              width: 100%;
+              border:1px;
+              padding:25px;
+            }
+
+            .formbold-input-flex {
+              display: flex;
+              gap: 20px;
+              margin-bottom: 22px;
+            }
+            .formbold-input-flex > div {
+              width: 50%;
+            }
+            .formbold-form-input {
+              width: 100%;
+              padding: 13px 22px;
+              border-radius: 5px;
+              border: 1px solid #DDE3EC;
+              background: #FFFFFF;
+              font-weight: 500;
+              font-size: 16px;
+              color: #536387;
+              outline: none;
+              resize: none;
+            }
+            .formbold-form-input:focus {
+              border-color: #6a64f1;
+              box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+            }
+            .formbold-form-label {
+              color: #07074D;
+              font-weight: 500;
+              font-size: 14px;
+              line-height: 24px;
+              display: block;
+              margin-bottom: 10px;
+            }
+           
+            
+ 
+            .formbold-btn {
+              display: flex;
+              align-items: center;
+              gap: 5px;
+              font-size: 16px;
+              border-radius: 5px;
+              padding: 10px 25px;
+              border: none;
+              font-weight: 500;
+              background-color: #6A64F1;
+              color: white;
+              cursor: pointer;
+              display:inline-block;
+            }
+            .formbold-btn:hover {
+              box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+              background-color: #536387;
+            }
+            
+           
+
+   label {
+	font-weight: bold;
+   }
+
+    #description, #responsibilities, #requirements, #preferences {
+	height: auto;
+	transition: height 0.2s;
+	resize: none;
+}
+
+        .form-group .input-div{
+        margin-bottom:30px;
+        }
+        
+        .input-div small{
+        float:left;
+        margin-top:5px;
+        }
+        
+        .add-interviewerDiv{
+        margin-bottom:30px;
+        }
+        
+          
+        #button-wrap{
+          text-align: center;
+          padding:20px;
+          margin-top:40px;
+        }

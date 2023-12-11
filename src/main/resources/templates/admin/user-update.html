@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Edit Profile</title>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="/css/general/interview.css" rel="stylesheet">
+<link href="/css/general/virtual-select.min.css" rel="stylesheet">
+<link rel="stylesheet" th:href="@{/vendors/feather/feather.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet" th:href="@{/vendors/css/vendor.bundle.base.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet" type="text/css"
+	href="@{/js/select.dataTables.min.css}">
+<link rel="shortcut icon" th:href="@{/images/Ace_Favicon.png}" />
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+	crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+	crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/vertical-layout-light/style.css}">
+
+<style>
+form {
+	margin: 0;
+	padding: 0;
+}
+
+form div.form-group {
+	margin-bottom: 15px;
+}
+
+label {
+	display: block;
+	font-weight: bold;
+}
+
+input[type="text"], input[type="email"], input[type="password"] {
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	font-size: 16px;
+}
+
+input[type="text"], input[type="email"] {
+	border-color: transparent;
+	background-color: #f9f9f9;
+}
+
+.form {
+	max-width: 600px;
+	margin-left: 10rem;
+	padding: 20px;
+	border: 1px solid #ccc;
+	border-radius: 10px;
+	background-color: #f9f9f9;
+}
+
+.row::after {
+	content: "";
+	clear: both;
+	display: table;
+}
+
+.form-group.col-md-6 {
+	float: left;
+	width: 50%;
+}
+
+/* Media query to make the form responsive for smaller screens */
+@media screen and (max-width: 600px) {
+	.form-group.col-md-6 {
+		width: 100%;
+	}
+}
+</style>
+</head>
+<body>
+	<div class="container-scroller">
+		<div th:replace="fragments/topbar :: topbar"></div>
+		<div class="page-body-wrapper">
+			<div th:replace="fragments/sidebar :: sidebar"></div>
+			<div class="main-panel">
+				<div class="content-wrapper">
+					<form class="form" action="">
+						<div class="row">
+							<div id="errorContainer" style="display: none;">
+								<p id="errorMessage" style="color: red; text-align: center;"></p>
+							</div>
+							<div id="successMessageContainer" class="successContainer"
+								style="display: none;">
+								<p id="successMessage" style="color: green; text-align: center;">Password
+									updated successfully!</p>
+							</div>
+							<div class="form-group col-md-6 col-sm-12">
+								<label for="username">Username</label> <input type="text"
+									id="username" name="username" readonly>
+							</div>
+							<div class="form-group col-md-6 col-sm-12">
+								<label for="email">Email</label> <input type="email" id="email"
+									name="email" readonly>
+							</div>
+							<div class="form-group col-md-6 col-sm-12">
+								<label for="newPassword">New Password</label> <input
+									type="password" id="newPassword" name="newPassword">
+							</div>
+							<div class="form-group col-md-6 col-sm-12">
+								<label for="confirmPassword">Confirm Password</label> <input
+									type="password" id="confirmPassword" name="confirmPassword">
+							</div>
+
+							<div class="form-group col-md-6 col-sm-12">
+								<label for="oldPassword">Old Password</label> <input
+									type="password" id="oldPassword" name="oldPassword">
+							</div>
+							<div class="form-group col-md-6 col-sm-12">
+								<button id="backButton" n class="btn btn-primary"
+									style="margin-top: 1.8rem" type="button">Back</button>
+								<button class="btn btn-primary" style="margin-top: 1.8rem"
+									type="submit" id="updateButton">Update</button>
+							</div>
+						</div>
+					</form>
+
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<script th:src="@{/vendors/js/vendor.bundle.base.js}"></script>
+	<!-- endinject -->
+	<!-- Plugin js for this page -->
+	<script th:src="@{/vendors/chart.js/Chart.min.js}"></script>
+	<script th:src="@{/vendors/datatables.net/jquery.dataTables.js}"></script>
+	<script
+		th:src="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.js}"></script>
+	<script th:src="@{/js/dataTables.select.min.js}"></script>
+
+	<!-- End plugin js for this page -->
+	<!-- inject:js -->
+	<script th:src="@{/js/off-canvas.js}"></script>
+	<script th:src="@{/js/hoverable-collapse.js}"></script>
+	<script th:src="@{/js/template.js}"></script>
+	<script th:src="@{/js/settings.js}"></script>
+	<script th:src="@{/js/todolist.js}"></script>
+	<script th:src="@{/javascripts/user-update.js}"></script>
+	<!-- endinject -->
+	<!-- Custom js for this page-->
+	<script th:src="@{/js/dashboard.js}"></script>
+	<script th:src="@{/js/Chart.roundedBarCharts.js}"></script>
+	<!-- Stomp -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+	<!-- SockJS -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+	<!-- Stomp -->
+	<script th:src="@{/javascripts/web_socket.js}"></script>
+</body>
+</html>

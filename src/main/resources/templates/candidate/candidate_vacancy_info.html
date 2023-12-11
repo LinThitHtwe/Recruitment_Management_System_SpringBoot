@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Ace Data Systems</title>
+<link rel="stylesheet" th:href="@{/vendors/feather/feather.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet" th:href="@{/vendors/css/vendor.bundle.base.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet" type="text/css"
+	th:href="@{/js/select.dataTables.min.css}">
+<link rel="stylesheet" th:href="@{/css/vertical-layout-light/style.css}">
+<link rel="shortcut icon" th:href="@{/images/Ace_Favicon.png}" />
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+	crossorigin="anonymous">
+<style>
+body {
+	background-color: #F5F7FF;
+}
+
+.auth-form-light {
+	background-color: #FFFFFF;
+	margin: 0 auto;
+	padding: 40px;
+	max-width: 500px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+	font-weight: bold;
+}
+
+#description, #responsibilities, #requirements, #preferences {
+	height: auto;
+	transition: height 0.2s;
+	resize: none;
+}
+
+.expandable-textarea {
+	overflow: hidden;
+	resize: none;
+	border: none;
+	background-color: transparent;
+}
+
+.no-background {
+	background-color: transparent !important;
+}
+</style>
+</head>
+
+<body>
+	<div class="container-scroller">
+		<!-- partial:partials/_navbar.html -->
+		<nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex ">
+			<div
+				class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+				<a class="navbar-brand brand-logo mr-5" href="index.html"><img
+					th:src="@{/images/ACEDataSystemFull.jpg}" class="mr-2" alt="logo"
+					width="80rem" height="50rem" /></a> <a
+					class="navbar-brand brand-logo-mini mr5" href="index.html"><img
+					th:src="@{/images/ACEDataSystemFull.jpg}" class="mr-2" alt="logo"
+					width="80rem" height="50rem" /></a>
+			</div>
+
+
+			<div
+				class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+
+				<ul class="navbar-nav mr-lg-2">
+					<li class="nav-item nav-search d-lg-block"><a class="nav-item"
+						th:href="@{/}"><button class="btn btn-light btn-md">Home</button></a>
+						<a class="nav-item" th:href="@{/candidate/about}"><button
+								class="btn btn-light btn-md">About</button></a></li>
+
+				</ul>
+			</div>
+		</nav>
+
+
+
+		<div class="main-panel" style="width: 100%; margin-top: 3rem;">
+			<div class="content-wrapper">
+				<div class="card">
+					<div class="card-body">
+						<h1 class="card-title">Vacancy Information</h1>
+						<p class="card-description"></p>
+						<form class="forms-sample row">
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="position">Position</label>
+									<p id="position" th:text="*{vacancyInfo.position.name}"></p>
+								</div>
+
+								<input type="text" style="display: none;" class="form-control"
+									id="id" name="id" placeholder="Enter your name."
+									th:value="${vacancyId}">
+
+								<div class="form-group">
+									<label for="count">Required Vacancies</label>
+									<p id="count" th:text="*{vacancyInfo.count + ' Posts'}"></p>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="department">Department</label>
+									<p id="department" th:text="*{vacancyInfo.department.name}"></p>
+								</div>
+								<div class="form-group"></div>
+							</div>
+							<div class="form-group col-md-12">
+								<label for="description">Job Description</label>
+								<p id="description" th:text="*{vacancyInfo.description}"></p>
+							</div>
+							<div class="form-group col-md-12">
+								<label for="responsibilities">Job Responsibilities</label>
+								<textarea class="form-control expandable-textarea no-background"
+									th:field="*{vacancyInfo.responsibility}" id="responsibilities"
+									disabled></textarea>
+							</div>
+							<div class="form-group col-md-12">
+								<label for="requirement">Job Requirements</label>
+								<textarea class="form-control expandable-textarea no-background"
+									th:field="*{vacancyInfo.requirement}" id="requirement" disabled></textarea>
+							</div>
+							<div class="form-group col-md-12">
+								<label for="preference">Preferences</label>
+								<textarea class="form-control expandable-textarea no-background"
+									th:field="*{vacancyInfo.preference}" id="preference" disabled></textarea>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="working-day">Working Day</label>
+									<p id="working-day"
+										th:text="*{vacancyInfo.startWorkingDay +' ~ '+ vacancyInfo.endWorkingDay}"></p>
+								</div>
+								<div class="form-group">
+									<label for="salary">Salary</label>
+									<p id="salary" th:text="*{vacancyInfo.salary}"></p>
+								</div>
+								<div class="form-group">
+									<label for="type">Job Type</label>
+									<p id="type" th:text="*{vacancyInfo.type}"></p>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="working-hour">Working Hours</label>
+									<p id="working-hour"
+										th:text="*{vacancyInfo.startWorkingHour}+ ' ~ ' + *{vacancyInfo.endWorkingHour}"></p>
+								</div>
+								<div class="form-group">
+									<label for="location">Job Location</label>
+									<p id="location" th:text="*{vacancyInfo.department.address}"></p>
+								</div>
+								<div class="form-group">
+									<label for="duration">Duration</label>
+									<p
+										th:text="*{' ('+vacancyInfo.createdDate +' ~ '+vacancyInfo.dueDate}+')'"></p>
+								</div>
+							</div>
+							<button type="button" class="btn btn-primary btn-lg btn-block"
+								data-bs-toggle="modal" data-bs-target="#candidateModel">
+								Apply Now</button>
+						</form>
+					</div>
+				</div>
+				<div class="modal fade" id="candidateModel" tabindex="-1"
+					aria-labelledby="candidateModelLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+
+							<div class="modal-header">
+								<button type="button" class="btn-close btn-secondary"
+									data-bs-dismiss="modal"
+									style="margin-right: 10px; margin-top: 10px;"
+									aria-label="Close"></button>
+							</div>
+							<form action="/candidate/register" method="post"
+								enctype="multipart/form-data" id="myForm">
+								<div class="modal-body">
+
+									<div class="row">
+										<div class="form-group">
+											<div
+												class="text-center bg-primary text-white text-center btn-sm">
+												<h3>Job Application</h3>
+											</div>
+										</div>
+										<div class="col-sm-6">
+
+											<div class="form-group">
+												<label for="name">Name</label> <input type="text"
+													class="form-control" id="name" name="name"
+													placeholder="Enter your name.">
+												<div id="nameValidationMessage" class="invalid-feedback"></div>
+											</div>
+											<div class="form-group">
+												<label for="dob">Birthday</label> <input type="date"
+													class="form-control" name="dob" id="dob">
+												<div id="dobValidationMessage" class="invalid-feedback">You
+													should 18 years old.(at least)</div>
+											</div>
+											<div class="form-group">
+												<label>Gender</label>
+												<div class="row"
+													style="position: relative; left: 1.5rem; width: 13rem">
+													<div class="col-6">
+														<div class="form-check" style="height: 1.65rem">
+															<input class="form-check-input" type="radio" value="0"
+																id="male" name="gender" checked> <label
+																class="form-check-label" for="male"> Male </label>
+														</div>
+													</div>
+													<div class="col-6">
+														<div class="form-check">
+															<input class="form-check-input" type="radio" value="1"
+																id="female" name="gender"> <label
+																class="form-check-label" for="female"> Female </label>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="techSkill">Technical Skill</label>
+												<textarea type="text" class="form-control" name="techSkill"
+													id="techSkill" placeholder="Enter Your Technical skills"></textarea>
+												<div id="techSkillValidationMessage"
+													class="invalid-feedback"></div>
+											</div>
+											<div class="form-group">
+												<label for="exp">Work Experience</label>
+												<textarea type="text" class="form-control" id="exp"
+													name="exp" placeholder="Work Experience"></textarea>
+												<div id="expValidationMessage" class="invalid-feedback"></div>
+											</div>
+											<div class="form-group">
+												<label for="mainTech">Main Specialist Technology</label> <input
+													type="text" class="form-control" name="mainTech"
+													id="mainTech" placeholder="Enter specialize technology">
+												<div id="mainTechValidationMessage" class="invalid-feedback"></div>
+											</div>
+
+										</div>
+										<div class="col-sm-6">
+											<!-- Right column content -->
+
+											<div class="form-group">
+												<label for="email">Email</label> <input type="email"
+													class="form-control" name="email" id="email"
+													placeholder="example@example.com">
+												<div id="emailValidationMessage" class="invalid-feedback">Please
+													enter your email.</div>
+											</div>
+
+											<div class="form-group">
+												<label for="phone">Phone Number</label> <input type="text"
+													class="form-control" id="phone" name="phone"
+													aria-describedby="basic-addon1"
+													placeholder="Enter Your Phone.">
+												<div id="phoneValidationMessage" class="invalid-feedback"></div>
+											</div>
+											<div class="form-group">
+												<label for="levelSelect">Please choose your level.</label>
+												<div class="dropdown input-group">
+													<select class="custom-select" id="levelSelect" name="level">
+														<option selected>Please Choose Level</option>
+														<option value="Low">Low</option>
+														<option value="Mid">Mid</option>
+														<option value="High">High</option>
+													</select>
+												</div>
+												<div id="levelValidationMessage" class="invalid-feedback">Please
+													select your level.</div>
+											</div>
+											<div class="form-group">
+												<label for="education">Education</label>
+												<textarea type="text" class="form-control" id="education"
+													name="education" placeholder="Your Education Level."></textarea>
+												<div id="educationValidationMessage"
+													class="invalid-feedback"></div>
+											</div>
+
+											<div class="form-group">
+												<label for="languageSkill">Language Skill</label>
+												<textarea type="text" class="form-control"
+													name="languageSkill" id="languageSkill"
+													placeholder="Which languages do you express?"></textarea>
+												<div id="languageSkillValidationMessage"
+													class="invalid-feedback"></div>
+											</div>
+
+											<div class="form-group">
+												<label for="expectedSalary">Expected Salary</label> <input
+													type="text" class="form-control" id="expectedSalary"
+													name="expectedSalary"
+													placeholder="Please enter expected salary.">
+												<div id="expectedSalaryValidationMessage"
+													class="invalid-feedback"></div>
+											</div>
+
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label for="file" style="display: block;">Upload Your
+											CV (Word, PDF)</label> <input type="file"
+											class="form-control btn-primary" id="file" name="file"
+											accept=".docx, .pdf"> <input type="hidden"
+											name="vacancyId" th:value="${vacancyInfo.id}">
+										<div id="fileValidationMessage" class="invalid-feedback">Please
+											select your cv form.</div>
+									</div>
+									<p>*Please double check your informations before sumitting</p>
+								</div>
+								<div class="modal-footer">
+									<span style="position: relative; right: .3rem"><button
+											type="button" class="btn btn-secondary btn-md"
+											data-bs-dismiss="modal">Close</button></span>
+									<button type="submit" class="btn btn-primary btn-md"
+										id="submitButton">Submit</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<!-- Modal end -->
+			</div>
+		</div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+	<script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const submitButton = document.getElementById('submitButton');
+            const form = document.getElementById('myForm');
+
+            function hasRepeatedCharacters(name) {
+                const consecutiveCharactersRegex = /(.)\1{2,}/;
+                return consecutiveCharactersRegex.test(name);
+            }
+
+            function validateForm() {
+
+                let isValid = true;
+
+                const nameInput = document.getElementById('name');
+                const nameRegex = /^[A-Z][A-Za-z]*(?: [A-Z][A-Za-z]*)*$/;
+                const nameValidationMessage = document.getElementById('nameValidationMessage');
+                if (!nameRegex.test(nameInput.value)) {
+                    nameInput.classList.remove('is-valid');
+                    nameInput.classList.add('is-invalid');
+                    nameValidationMessage.textContent = 'Please enter a valid name starting with a capital letter and containing only letters and spaces.';
+                    isValid = false;
+                } else if (hasRepeatedCharacters(nameInput.value)) {
+                    nameInput.classList.remove('is-valid');
+                    nameInput.classList.add('is-invalid');
+                    nameValidationMessage.textContent = 'Name cannot have three or more consecutive repeated characters.';
+                    isValid = false;
+                } else {
+                    nameInput.classList.remove('is-invalid');
+                    nameInput.classList.add('is-valid');
+                    nameValidationMessage.textContent = '';
+                }
+
+                // Validate Email
+                const emailInput = document.getElementById('email');
+				const emailInputValue = emailInput.value.trim();
+					const emailValidationMessage = document.getElementById('emailValidationMessage');
+
+				const emailRegex = /^.+@.+\.com$/;
+				let isEmailValid = true; 
+
+		if (!emailRegex.test(emailInputValue)) {
+  		  emailInput.classList.remove('is-valid');
+  		  emailInput.classList.add('is-invalid');
+   		 emailValidationMessage.textContent = 'Please enter a valid email address.';
+   		isEmailValid = false;
+		} else {
+   		 emailInput.classList.remove('is-invalid');
+    		emailInput.classList.add('is-valid');
+    	emailValidationMessage.textContent = '';
+		}
+		 const vacancyId = document.getElementById('id');
+		 console.log(vacancyId);
+		 if (isEmailValid) {
+		      const url = '/candidate/check-candidate-duplication?email=${emailInput}&vacancyId=${vacancyId}';
+		      fetch(url)
+		        .then((response) => {
+		          if (!response.ok) {
+		            throw new Error('Request failed.');
+		          }
+		          return response.text();
+		        })
+		        .then((statusMsg) => {
+		          if (statusMsg !== null) {
+		            console.log(statusMsg);
+		          }
+		        })
+		        .catch((error) => {
+		          console.error(error.message);
+		        });
+		    
+		}
+
+                // Validate Date of Birth
+                const dobInput = document.getElementById('dob');
+                const currentDate = new Date();
+                const dobDate = new Date(dobInput.value);
+                const minAge = 18;
+                const minAgeDate = new Date(currentDate.getFullYear() - minAge, currentDate.getMonth(), currentDate.getDate());
+
+                if (dobDate >= minAgeDate) {
+                    dobInput.classList.add('is-invalid');
+                    isValid = false;
+                } else if(dobDate <= minAgeDate){
+                    dobInput.classList.remove('is-invalid');
+                    dobInput.classList.add('is-valid');
+                }else {
+                    dobInput.classList.add('is-invalid');
+                }
+
+                // Validate Phone
+                const phoneInput = document.getElementById('phone');
+                const phoneInputValue = phoneInput.value.trim();
+                const phoneValidationMessage = document.getElementById('phoneValidationMessage');
+
+                // Remove any non-digit characters except '+'
+                phoneInput.value = phoneInputValue.replace(/[^+\d]/g, '');
+
+                // Validate Phone
+                const plusRegex = /^\+\d{5,12}$/;
+                const zeroRegex = /^09\d{5,9}$/;
+                const oneRegex = /^01\d{5}$/;
+                const cleanedPhoneInputValue = phoneInput.value;
+
+                if (!plusRegex.test(cleanedPhoneInputValue) && !zeroRegex.test(cleanedPhoneInputValue) && !oneRegex.test(cleanedPhoneInputValue)) {
+                    phoneInput.classList.remove('is-valid');
+                    phoneInput.classList.add('is-invalid');
+                    phoneValidationMessage.textContent = 'Please enter a valid phone number.';
+                    isValid = false;
+                } else {
+                    phoneInput.classList.remove('is-invalid');
+                    phoneInput.classList.add('is-valid');
+                    phoneValidationMessage.textContent = '';
+                }
+
+                //technical skill validate
+                const techSkillInput = document.getElementById('techSkill');
+                const techSkillInputValue = techSkillInput.value.trim(); // Remove leading and trailing spaces
+                const techSkillValidationMessage = document.getElementById('techSkillValidationMessage');
+
+                if (techSkillInputValue === '') {
+                    techSkillInput.classList.remove('is-valid');
+                    techSkillInput.classList.add('is-invalid');
+                    techSkillValidationMessage.textContent = 'Please enter your technical skills.';
+                    isValid = false;
+                } else {
+                    techSkillInput.classList.remove('is-invalid');
+                    techSkillInput.classList.add('is-valid');
+                    techSkillValidationMessage.textContent = '';
+                }
+
+                //main technical
+                const mainTechInput = document.getElementById('mainTech');
+                const mainTechInputValue = mainTechInput.value.trim(); // Remove leading and trailing spaces
+                const mainTechValidationMessage = document.getElementById('mainTechValidationMessage');
+
+                if (mainTechInputValue === '') {
+                    mainTechInput.classList.remove('is-valid');
+                    mainTechInput.classList.add('is-invalid');
+                    mainTechValidationMessage.textContent = 'Please enter the main specialized technology.';
+                    isValid = false;
+                } else {
+                    mainTechInput.classList.remove('is-invalid');
+                    mainTechInput.classList.add('is-valid');
+                    mainTechValidationMessage.textContent = '';
+                }
+
+                //Education validation
+                const educationInput = document.getElementById('education');
+                const educationInputValue = educationInput.value.trim(); // Remove leading and trailing spaces
+                const educationValidationMessage = document.getElementById('educationValidationMessage');
+
+                if (educationInputValue === '') {
+                    educationInput.classList.remove('is-valid');
+                    educationInput.classList.add('is-invalid');
+                    educationValidationMessage.textContent = 'Please enter your education level.';
+                    isValid = false;
+                } else {
+                    educationInput.classList.remove('is-invalid');
+                    educationInput.classList.add('is-valid');
+                    educationValidationMessage.textContent = '';
+                }
+
+                //language validate
+                const languageSkillInput = document.getElementById('languageSkill');
+                const languageSkillInputValue = languageSkillInput.value.trim(); // Remove leading and trailing spaces
+                const languageSkillValidationMessage = document.getElementById('languageSkillValidationMessage');
+
+                if (languageSkillInputValue === '') {
+                    languageSkillInput.classList.remove('is-valid');
+                    languageSkillInput.classList.add('is-invalid');
+                    languageSkillValidationMessage.textContent = 'Please enter your language skills.';
+                    isValid = false;
+                } else {
+                    languageSkillInput.classList.remove('is-invalid');
+                    languageSkillInput.classList.add('is-valid');
+                    languageSkillValidationMessage.textContent = '';
+                }
+
+                // Validate Expected Salary
+                const expectedSalaryInput = document.getElementById('expectedSalary');
+                const expectedSalaryInputValue = expectedSalaryInput.value.trim(); // Remove leading and trailing spaces
+                const expectedSalaryValidationMessage = document.getElementById('expectedSalaryValidationMessage');
+
+                if (expectedSalaryInputValue === '') {
+                    expectedSalaryInput.classList.remove('is-valid');
+                    expectedSalaryInput.classList.add('is-invalid');
+                    expectedSalaryValidationMessage.textContent = 'Please enter your expected salary.';
+                    isValid = false;
+                } else {
+                    expectedSalaryInput.classList.remove('is-invalid');
+                    expectedSalaryInput.classList.add('is-valid');
+                    expectedSalaryValidationMessage.textContent = '';
+                }
+
+                //exp validate
+                const expInput = document.getElementById('exp');
+                const expInputValue = expInput.value.trim(); // Remove leading and trailing spaces
+                const expValidationMessage = document.getElementById('expValidationMessage');
+
+                if (expInputValue === '') {
+                    expInput.classList.remove('is-valid');
+                    expInput.classList.add('is-invalid');
+                    expValidationMessage.textContent = 'Please enter your work experience.';
+                    isValid = false;
+                } else {
+                    expInput.classList.remove('is-invalid');
+                    expInput.classList.add('is-valid');
+                    expValidationMessage.textContent = '';
+                }
+                const fileInput = document.getElementById('file');
+                const fileValidationMessage = document.getElementById('fileValidationMessage');
+                const allowedFileExtensions = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+
+                if (fileInput.files.length === 0 || !allowedFileExtensions.includes(fileInput.files[0].type)) {
+                    fileInput.classList.remove('is-valid');
+                    fileInput.classList.add('is-invalid');
+                    fileValidationMessage.textContent = 'Please select a valid CV file in PDF or Word (DOCX) format.';
+                    isValid = false;
+                } else {
+                    fileInput.classList.remove('is-invalid');
+                    fileInput.classList.add('is-valid');
+                    fileValidationMessage.textContent = '';
+                }
+
+
+
+                // Enable or disable the submit button based on the validation result
+                submitButton.disabled = !isValid;
+
+                return isValid;
+            }
+
+            function validateAndEnableSubmitButton() {
+                const submitButton = form.querySelector('#submitButton');
+                submitButton.disabled = !validateForm();
+            }
+
+            form.addEventListener('submit', function (event) {
+
+                if (validateForm()) {
+                    // Form is valid, you can submit it
+                    // For demonstration purposes, let's just log a success message here
+                    console.log('Form is valid. Submitting...');
+                    // Uncomment the following line to submit the form:
+                    // form.submit();
+                } else {
+                    // Form is not valid, prevent submission and display an error message
+                    console.log('Form is not valid. Please check the fields.');
+                }
+            });
+
+            // Attach input event listeners to re-validate the form on input change
+            form.querySelectorAll('input, textarea').forEach(input => {
+                input.addEventListener('input', validateAndEnableSubmitButton);
+            });
+
+            // Validate and enable/disable the submit button on page load
+            validateAndEnableSubmitButton();
+        });
+    </script>
+
+
+	<script>
+		function autoExpandTextarea() {
+			var textareas = document
+					.getElementsByClassName('expandable-textarea');
+
+			for (var i = 0; i < textareas.length; i++) {
+				textareas[i].style.height = 'auto';
+				textareas[i].style.height = textareas[i].scrollHeight + 'px';
+			}
+		}
+
+		function setupAutoExpand() {
+			autoExpandTextarea();
+
+			var textareas = document
+					.getElementsByClassName('expandable-textarea');
+
+			for (var i = 0; i < textareas.length; i++) {
+				textareas[i].addEventListener('input', autoExpandTextarea);
+			}
+		}
+
+		// Call the function initially to set the proper heights
+		setupAutoExpand();
+	</script>
+	<script th:src="@{/vendors/js/vendor.bundle.base.js}"></script>
+	<!-- endinject -->
+	<!-- Plugin js for this page -->
+	<script th:src="@{/vendors/chart.js/Chart.min.js}"></script>
+	<script th:src="@{/vendors/datatables.net/jquery.dataTables.js}"></script>
+	<script
+		th:src="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.js}"></script>
+	<script th:src="@{/js/dataTables.select.min.js}"></script>
+
+	<!-- End plugin js for this page -->
+	<!-- inject:js -->
+	<script th:src="@{/js/off-canvas.js}"></script>
+	<script th:src="@{/js/hoverable-collapse.js}"></script>
+	<script th:src="@{/js/template.js}"></script>
+	<script th:src="@{/js/settings.js}"></script>
+	<script th:src="@{/js/todolist.js}"></script>
+		<script th:src="@{/javascripts/sidebar-active.js}"></script>
+	<!-- endinject -->
+	<!-- Custom js for this page-->
+	<script th:src="@{/js/dashboard.js}"></script>
+	<script th:src="@{/js/Chart.roundedBarCharts.js}"></script>
+	<!-- End custom js for this page-->
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+		crossorigin="anonymous"></script>
+</body>
+
+</html>

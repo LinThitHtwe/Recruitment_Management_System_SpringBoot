@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Vacancy Form</title>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- plugins:css -->
+<link rel="stylesheet" th:href="@{/vendors/feather/feather.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet" th:href="@{/vendors/css/vendor.bundle.base.css}">
+<!-- endinject -->
+<!-- Plugin css for this page -->
+<link rel="stylesheet"
+	th:href="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet" type="text/css"
+	href="@{/js/select.dataTables.min.css}">
+<!-- End plugin css for this page -->
+<!-- inject:css -->
+<link rel="stylesheet" th:href="@{/css/vertical-layout-light/style.css}">
+<!-- endinject -->
+<link rel="shortcut icon" th:href="@{/images/Ace_Favicon.png}" />
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" />
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+	integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+	crossorigin="anonymous">
+</head>
+
+<style>
+body {
+	background-color: #F5F7FF;
+}
+
+.auth-form-light {
+	background-color: #FFFFFF;
+	margin: 0 auto;
+	padding: 40px;
+	max-width: 500px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+	font-weight: bold;
+}
+
+#description, #responsibilities, #requirements, #preferences {
+	height: auto;
+	transition: height 0.2s;
+	resize: none;
+}
+</style>
+
+<body>
+	<div class="container-scroller">
+		<div th:replace="fragments/topbar :: topbar"></div>
+		<div class="page-body-wrapper">
+			<div th:replace="fragments/sidebar :: sidebar"></div>
+			<div class="main-panel">
+				<div class="content-wrapper">
+					<!-- Success Alert -->
+					<div th:if="${addSuccess}"
+						class="alert alert-success alert-dismissible fade show"
+						role="alert" id="successAlert">
+						New vacancy posted successfully!
+						<button type="button" class="close" data-dismiss="alert"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<!-- Success Alert -->
+					<div class="card">
+						<div class="card-body">
+							<h1 class="card-title">Add New Vacancy</h1>
+							<p class="card-description">Vacancy information</p>
+							<form class="forms-sample row" th:action="@{/hr/add-vacancy}"
+								method="post" th:object="${vacancy}">
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label for="position">Position</label> <span
+											class="text-danger" id="positionError" style="display: none;">*Create
+											a position first</span> <select class="form-control" name="position"
+											id="position">
+											<option th:each="position : ${positionList}"
+												th:value="${position.id}" th:text="${position.name}"></option>
+											<option th:if="${positionList == null}" value="">No
+												position available</option>
+										</select>
+									</div>
+									<div class="form-group">
+										<label for="required-vacancies">Required Vacancies <span
+											class="text-danger" id="countError" style="display: none;">Vacancy require post has to be at least 1</span></label> <input th:field="*{count}" type="number" min="0"
+											class="form-control" id="required-vacancies">
+									</div>
+
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label for="department">Department</label> <span
+											class="text-danger" id="departmentError"
+											style="display: none;">*Create a department first</span> <select
+											class="form-control" name="department" id="department">
+											<option th:each="department : ${departmentList}"
+												th:value="${department.id}" th:text="${department.name}"></option>
+											<option th:if="${departmentList == null}" value="">No
+												department available</option>
+										</select>
+									</div>
+									<div class="form-group">
+										<label for="urgent">Status</label>
+										<div id="urgent" class="text-left mt-2">
+											<input type="checkbox" name="urgent" th:field="*{urgent}"
+												value="true" /> <span> Urgent</span>
+										</div>
+
+									</div>
+								</div>
+								<div class="form-group col-md-12">
+									<label for="description">Description <span
+										class="text-danger" id="descriptionError"
+										style="display: none;">*Description cannot be empty</span></label>
+									<textarea class="form-control expandable-textarea"
+										th:field="*{description}" id="description" rows="6"></textarea>
+								</div>
+								<div class="form-group col-md-12">
+									<label for="responsibilities">Responsibilities <span
+										class="text-danger" id="responsibilitiesError"
+										style="display: none;">*Responsibilities cannot be
+											empty</span></label>
+									<div class="btn-toolbar" role="group">
+										<button type="button" class="btn btn-sm btn-white"
+											onclick="addBullet('responsibilities')">
+											<i class="bi bi-plus-circle" data-toggle="tooltip"
+												data-placement="top" title="Add a bullet"
+												style="cursor: pointer"></i>
+										</button>
+										<button type="button" class="btn btn-sm btn-white"
+											onclick="insertBulletAndSpaces('responsibilities')">
+											<i class="bi bi-list-ul" data-toggle="tooltip"
+												data-placement="top" title="Make a bullet list"
+												style="cursor: pointer"></i>
+										</button>
+										<button type="button" class="btn btn-sm btn-white">
+											<i class="bi bi-arrow-bar-down" data-toggle="tooltip"
+												data-placement="top" title="Toggle text area"
+												onclick="toggleTextareaSize('responsibilities','toggle-icon-1')"
+												style="cursor: pointer" id="toggle-icon-1"></i>
+										</button>
+									</div>
+									<textarea class="form-control expandable-textarea"
+										th:field="*{responsibility}" id="responsibilities" rows="6"
+										onkeydown="insertBulletOnEnter(event,'responsibilities')"></textarea>
+								</div>
+								<div class="form-group col-md-12">
+									<label for="requirements">Requirements <span
+										id="requirementError" class="text-danger"
+										style="display: none;">*Requirements cannot be empty</span></label>
+									<div class="btn-toolbar" role="group">
+										<button type="button" class="btn btn-sm btn-white"
+											onclick="addBullet('requirements')">
+											<i class="bi bi-plus-circle" data-toggle="tooltip"
+												data-placement="top" title="Add a bullet"
+												style="cursor: pointer"></i>
+										</button>
+										<button type="button" class="btn btn-sm btn-white"
+											onclick="insertBulletAndSpaces('requirements')">
+											<i class="bi bi-list-ul" data-toggle="tooltip"
+												data-placement="top" title="Make a bullet list"
+												style="cursor: pointer"></i>
+										</button>
+										<button type="button" class="btn btn-sm btn-white">
+											<i class="bi bi-arrow-bar-down" data-toggle="tooltip"
+												onclick="toggleTextareaSize('requirements','toggle-icon-2')"
+												data-placement="top" title="Toggle text area"
+												style="cursor: pointer" id="toggle-icon-1"></i>
+										</button>
+									</div>
+									<textarea class="form-control expandable-textarea"
+										th:field="*{requirement}" id="requirements" rows="6"
+										onkeydown="insertBulletOnEnter(event,'requirements')"></textarea>
+								</div>
+								<div class="form-group col-md-12">
+									<label for="preferences">Preferences <span
+										class="text-danger" id="preferencesError"
+										style="display: none;">*Preferences cannot be empty</span></label>
+									<div class="btn-toolbar" role="group">
+										<button type="button" class="btn btn-sm btn-white"
+											onclick="addBullet('preferences')">
+											<i class="bi bi-plus-circle" data-toggle="tooltip"
+												data-placement="top" title="Add a bullet"
+												style="cursor: pointer"></i>
+										</button>
+										<button type="button" class="btn btn-sm btn-white"
+											onclick="insertBulletAndSpaces('preferences')">
+											<i class="bi bi-list-ul" data-toggle="tooltip"
+												data-placement="top" title="Make a bullet list"
+												style="cursor: pointer"></i>
+										</button>
+										<button type="button" class="btn btn-sm btn-white">
+											<i class="bi bi-arrow-bar-down" data-toggle="tooltip"
+												data-placement="top" title="Toggle text area"
+												onclick="toggleTextareaSize('preferences','toggle-icon-3')"
+												style="cursor: pointer" id="toggle-icon-1"></i>
+										</button>
+									</div>
+									<textarea class="form-control expandable-textarea"
+										th:field="*{preference}" id="preferences" rows="6"
+										onkeydown="insertBulletOnEnter(event,'preferences')"></textarea>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label for="start-working-day">Working Day(From)</label> <select
+											class="form-control" name="startWorkingDay"
+											th:field="*{startWorkingDay}" id="start-working-day">
+											<option value="Monday" selected>Monday</option>
+											<option value="Tuesday">Tuesday</option>
+											<option value="Wednesday">Wednesday</option>
+											<option value="Thursday">Thursday</option>
+											<option value="Friday">Friday</option>
+											<option value="Saturday">Saturday</option>
+											<option value="Sunday">Sunday</option>
+										</select>
+									</div>
+									<div class="form-group">
+										<label for="start-working-time">Working Hours(From) <span
+											style="display: none;" class="text-danger">*Invalid</span></label> <input
+											class="form-control" type="time" name="startWorkingHour"
+											th:field="*{startWorkingHour}" id="start-working-time">
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label for="end-working-day">Working Day(To)</label> <select
+											class="form-control" name="endWorkingDay"
+											th:field="*{endWorkingDay}" id="end-working-day">
+											<option value="Monday">Monday</option>
+											<option value="Tuesday">Tuesday</option>
+											<option value="Wednesday">Wednesday</option>
+											<option value="Thursday">Thursday</option>
+											<option value="Friday">Friday</option>
+											<option value="Saturday">Saturday</option>
+											<option value="Sunday">Sunday</option>
+										</select>
+									</div>
+									<div class="form-group">
+										<label for="end-working-time">Working Hours(To) <span
+											style="display: none;" class="text-danger time-error">*Invalid</span></label>
+										<input class="form-control" type="time" name="endWorkingHour"
+											th:field="*{endWorkingHour}" id="end-working-time">
+									</div>
+								</div>
+								<div class="form-group col-md-12">
+									<label for="salary">Salary <span class="text-danger"
+										id="salaryError" style="display: none;">*Salary cannot
+											be empty</span></label> <input type="text" class="form-control"
+										th:field="*{salary}" id="salary">
+								</div>
+								<div class="form-group col-md-12">
+									<label for="job-type">Job Type</label> <select
+										class="form-control" name="jobType" th:field="*{type}"
+										id="job-type">
+
+										<option value="Full Time">Full Time</option>
+										<option value="Work From Home">Work From Home</option>
+										<option value="Part Time">Part Time</option>
+									</select>
+								</div>
+								<div class="form-group col-md-12 text-right">
+									<button type="submit" id="submit-btn" class="btn btn-primary">Post</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- main panel end-->
+		</div>
+	</div>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+	<!-- plugins:js -->
+	<script th:src="@{/vendors/js/vendor.bundle.base.js}"></script>
+	<!-- endinject -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+	<!-- Plugin js for this page -->
+	<script th:src="@{/vendors/chart.js/Chart.min.js}"></script>
+	<script th:src="@{/vendors/datatables.net/jquery.dataTables.js}"></script>
+	<script
+		th:src="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.js}"></script>
+	<script th:src="@{/js/dataTables.select.min.js}"></script>
+	<!-- End plugin js for this page -->
+	<!-- inject:js -->
+	<script th:src="@{/js/off-canvas.js}"></script>
+	<script th:src="@{/js/hoverable-collapse.js}"></script>
+	<script th:src="@{/js/template.js}"></script>
+	<script th:src="@{/js/settings.js}"></script>
+	<script th:src="@{/js/todolist.js}"></script>
+	<!-- endinject -->
+	<!-- Custom js for this page-->
+	<script th:src="@{/js/dashboard.js}"></script>
+	<script th:src="@{/js/Chart.roundedBarCharts.js}"></script>
+	<script th:src="@{/javascripts/vacancy.js}"></script>
+	<script th:src="@{/javascripts/vacancy_validation.js}"></script>
+	<script th:src="@{/javascripts/web_socket.js}"></script>
+	<!-- End custom js for this page-->
+	<!-- SockJS -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+	<!-- Stomp -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+	<script th:src="@{/javascripts/web_socket.js}"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+		integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+		crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -1,0 +1,129 @@
+.clickable {
+	cursor: pointer; /* Change cursor to pointer on clickable elements */
+}
+
+.no-underline {
+	text-decoration: none !important;
+	/* Remove underlines from anchor links */
+}
+
+ul {
+  list-style-type: none;
+}
+
+/* Add custom styles here */
+.custom-card {
+	width: 100%;
+	height: 2.5rem;
+	border-radius: 8px;
+	font-family: sans-serif;
+}
+.tleft{
+	text-align: left;
+}
+.all-text{
+	height:100%;
+	color:#7a828b;
+	text-align:left;
+	margin-top:.2rem;
+}
+.all-text:hover{
+	color:white;
+}
+
+.custom-card:hover {
+	color:white;
+	background-color: #4b49ac;
+}
+
+.custom-card-header {
+	font-family: sans-serif;
+	text-transform: capitalize;
+	height: 2.3rem;
+	border: 0;
+}
+
+.list-group-item {
+	border: none; /* Remove border between list items */
+}
+
+.list-group-item:hover {
+	background-color: #6c757d; /* Change background color on hover */
+}
+
+.card {
+	width: 100%;
+	height: 10rem;
+	background-color: white;
+	box-shadow: 0 0rem .5rem .2rem #d2d4d2;
+	transition: transform 0.3s; /* Set the duration for the animation */
+	border-radius: 0%;
+	margin-bottom: 1.5rem;
+}
+
+.card:hover {
+	transform: translateY(-5px);
+	/* Adjust the amount of vertical movement */
+}
+
+.card-header {
+	text-transform: capitalize;
+	font-family: sans-serif;
+	height: 2.7rem;
+	background-color: #fff;
+	border: 0;
+}
+
+.card-body {
+	background-color: #fff;
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.card-footer {
+	background-color: #fff;
+	border: 0;
+}
+
+.text-post {
+	font-size: 13px;
+}
+
+.btn-detail {
+	color: white;
+	background-color: #1d497f;
+}
+
+.btn-detail:hover {
+	color: white;
+	background-color: #1c1075;
+}
+
+/* Custom CSS for hiding the button on phone-sized screens */
+@media ( max-width : 576px) {
+	.hide-on-phone {
+		display: none;
+	}
+}
+
+#requirements {
+	height: auto;
+	transition: height 0.2s;
+	resize: none;
+}
+
+.expandable-textarea {
+	overflow: hidden;
+	resize: none;
+	border: none;
+	background-color: transparent;
+}
+
+.no-background {
+	background-color: transparent !important;
+}
+@media ( max-width : 576px) {
+	.hide-on-phone {
+		display: none;
+	}
+}

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Home</title>
+<link rel="stylesheet" th:href="@{/vendors/feather/feather.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet" th:href="@{/vendors/css/vendor.bundle.base.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet" type="text/css"
+	th:href="@{/js/select.dataTables.min.css}">
+<link rel="stylesheet" th:href="@{/css/vertical-layout-light/style.css}">
+<link rel="stylesheet" th:href="@{/css/home.css}">
+<link rel="shortcut icon" th:href="@{/images/Ace_Favicon.png}" />
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+	<div class="container-scroller">
+		<!-- partial:partials/_navbar.html -->
+		<nav class="navbar col-sm-12 col-12 p-0 fixed-top d-flex "
+			th:fragment="nav">
+			<div
+				class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+				<a class="navbar-brand brand-logo mr-5" th:href="@{/}"><img
+					th:src="@{/images/ACEDataSystemFull.jpg}" alt="logo" /></a> <a
+					class="navbar-brand brand-logo-mini" th:href="@{/}"><img
+					th:src="@{/images/ACEDataSystemFull.jpg}" alt="logo" /></a>
+			</div>
+			<div
+				class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+
+				<ul class="navbar-nav navbar-nav-right">
+
+					<li class="navbar-nav mr-sm-2"><a
+						class="nav-item text-decoration-none" th:href="@{/}">
+							<button class="btn btn-light btn-sm hide-on-phone">Home</button>
+					</a> <a class="nav-item text-decoration-none"
+						th:href="@{/candidate/jobs}"><button
+								class="btn btn-light btn-sm">Jobs</button></a> <a
+						class="nav-item text-decoration-none"
+						th:href="@{/candidate/about}"><button
+								class="btn btn-light btn-sm">About</button></a></li>
+				</ul>
+			</div>
+
+		</nav>
+
+
+
+		<div class="main-panel" style="width: 100%; margin-top: 3rem;">
+			<div class="content-wrapper">
+				<!--Welcome text-->
+				<div style="min-height: 55vh;" class="mb-5">
+					<img class="img-fluid col-sm-12" th:src="@{/images/ace-cp.jpg}"
+						style="max-width: 100%; height: auto; max-height: 55vh;">
+					<div class="welcome" style="margin-bottom: 5rem; margin-top: 5rem;">
+						<h1 class="d-none d-md-block">We are hiring...</h1>
+						<h3 class="d-md-none d-sm-block">We are hiring...</h3>
+						<!-- <h6 class="d-sm-none">We are hiring</h6> -->
+						<h3 class="d-none d-md-block">"A Trustworthy Organization
+							providing Total ICT Solutions and Continuous Services."</h3>
+						<h6 class="d-md-none d-sm-block">"A Trustworthy Organization
+							providing Total ICT Solutions and Continuous Services."</h6>
+						<!-- <p class="d-sm-none d-xs-block">"A Trustworthy Organization providing Total ICT Solutions and Continuous Services."</p> -->
+						<p class="d-md-block">Ever since its foundation in 1992, ACE
+							Data Systems has been the most successful IT Services company</p>
+					</div>
+				</div>
+
+				<!-- Card -->
+
+				<div class="row">
+					<div class="col-lg-4 col-md-6 col-xs-12 bg-light"
+						th:each="vacancyItem : ${vacancyList}"
+						th:data-position-id="${vacancyItem.position?.id}">
+
+						<div class="card position-card rounded"
+							style="border-radius: 4px;">
+							<div class="card-header">
+								<h3>
+									<a
+										th:href="@{/candidate/vacancy-info/{id}(id = ${vacancyItem.id})}"
+										class="text-black tab-link "
+										th:text="*{vacancyItem.position.name}"></a>
+
+								</h3>
+							</div>
+							<div class="card-body row">
+
+								<div class="tags p-2" style="width: 175px">
+									<div>
+										<i class="ti-user text-info"></i> <span
+											th:text="*{vacancyItem.count}"
+											style="font-family: sans-serif; font-size: 15px"></span>
+									</div>
+								</div>
+								<div class="tags p-2" style="width: 175px">
+									<div>
+										<i class="ti-location-pin text-success"></i> <span
+											th:text="*{vacancyItem.department.address}"></span>
+									</div>
+								</div>
+								<div class="tags p-2 text-green" style="width: 175px">
+									<div>
+										<i class="ti-wallet text-info"></i> <span
+											th:text="*{vacancyItem.salary}"></span>
+									</div>
+								</div>
+
+							</div>
+							<div class="card-footer">
+								<div class="row">
+									<div class="col tags p-2">
+										<span class="badge rounded-pill badge-info"
+											th:text="${vacancyItem.type}"></span> <span
+											th:if="${vacancyItem.urgent}"
+											class="badge rounded-pill badge-primary text-white">Urgent</span>
+									</div>
+
+									<div class="coltags p-2 text-right">
+										<a
+											th:href="@{/candidate/vacancy-info/{id}(id = ${vacancyItem.id})}"
+											class="btn btn-secondary btn-xs">Details</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="container mt-4 mb-4">
+					<div class="row">
+						<div class="col"></div>
+						<!-- Empty container to position the button -->
+						<div class="col-5 text-center">
+							<a
+								class="btn btn-sm rounded-pill shadow text-white tab-link tab-bottom btn-detail"
+								th:href="@{/candidate/jobs}">See More</a>
+						</div>
+						<div class="col"></div>
+						<!-- Empty container to position the button -->
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<footer class="footer" style="color: black;">
+			<div
+				class="d-sm-flex justify-content-center justify-content-sm-between">
+				<span class=" text-center text-sm-left d-block d-sm-inline-block">
+					<span style="font-size: 1rem;"> <i
+						class="fa-solid fa-envelope"></i> info@acedatasystems.com
+				</span> <span class="d-block d-sm-inline-block"
+					style="font-size: 1rem; position: relative; left: 1rem;"> <i
+						class="fa-solid fa-square-phone"></i> <span
+						style="font-size: .8rem;">95-1-652239</span>
+				</span><br> © 2023 All rights reserved by <a href="acedatasystems.com"
+					target="_blank" style="color: #3e73b5;">Ace Data Systems</a> Ltd.
+				</span> <span
+					class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Contact-Us.<br>
+					<span style="font-size: 1rem;"> <a
+						href="https://www.facebook.com/acedatasystems"
+						style="color: #3e73b5;"><i
+							class="fa-brands fa-square-facebook"></i></a> <span
+						style="position: relative; left: .3rem;"><a
+							href="https://acedatasystems.com/" style="color: #3e73b5;"><i
+								class="fa-brands fa-chrome"></i></a></span>
+				</span>
+				</span>
+			</div>
+		</footer>
+	</div>
+	<script th:src="@{/vendors/js/vendor.bundle.base.js}"></script>
+	<!-- endinject -->
+	<!-- Plugin js for this page -->
+	<script th:src="@{/vendors/chart.js/Chart.min.js}"></script>
+	<script th:src="@{/vendors/datatables.net/jquery.dataTables.js}"></script>
+	<script
+		th:src="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.js}"></script>
+	<script th:src="@{/js/dataTables.select.min.js}"></script>
+
+	<!-- End plugin js for this page -->
+	<!-- inject:js -->
+	<script th:src="@{/js/off-canvas.js}"></script>
+	<script th:src="@{/js/hoverable-collapse.js}"></script>
+	<script th:src="@{/js/template.js}"></script>
+	<script th:src="@{/js/settings.js}"></script>
+	<script th:src="@{/js/todolist.js}"></script>
+	<!-- endinject -->
+	<!-- Custom js for this page-->
+	<script th:src="@{/js/dashboard.js}"></script>
+	<script th:src="@{/js/Chart.roundedBarCharts.js}"></script>
+	<!-- End custom js for this page-->
+</body>
+
+</html>

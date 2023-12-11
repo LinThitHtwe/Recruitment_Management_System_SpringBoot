@@ -1,0 +1,59 @@
+body {
+	background-color: #F5F7FF;
+}
+
+.auth-form-light {
+	background-color: #FFFFFF;
+	margin: 0 auto;
+	padding: 40px;
+	max-width: 500px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+	font-weight: bold;
+}
+
+#description, #responsibilities, #requirements, #preferences {
+	height: auto;
+	transition: height 0.2s;
+	resize: none;
+}
+
+.expandable-textarea {
+	overflow: hidden;
+	resize: none;
+	border: none;
+	background-color: transparent;
+}
+ 
+.no-background {
+	background-color: transparent !important;
+}
+.position{
+	font-family:sans-serif;
+	font-weight:bold;
+	text-transform: capitalize;
+}
+.card{
+	border-style: solid; 
+}
+h3{
+	font-family:serif;
+	font-weight: bold;
+}
+.card-ti{
+	font-size: 25px;
+}
+h5{
+	font-family:serif;
+	font-weight: bold;
+}
+@media ( max-width : 576px) {
+	.hide-on-phone {
+		display: none;
+	}
+}
+.title{
+	margin-bottom: 1.5rem;margin-top:1rem
+}

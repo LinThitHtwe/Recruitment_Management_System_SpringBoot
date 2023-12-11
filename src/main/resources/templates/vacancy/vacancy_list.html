@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Vacancy List</title>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- plugins:css -->
+<link rel="stylesheet" th:href="@{/vendors/feather/feather.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet" th:href="@{/vendors/css/vendor.bundle.base.css}">
+<!-- endinject -->
+<!-- Plugin css for this page -->
+<link rel="stylesheet"
+	th:href="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.css}">
+<link rel="stylesheet"
+	th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet" type="text/css"
+	href="@{/js/select.dataTables.min.css}">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<!-- End plugin css for this page -->
+<!-- inject:css -->
+<link rel="stylesheet" th:href="@{/css/vertical-layout-light/style.css}">
+<!-- endinject -->
+<link rel="shortcut icon" th:href="@{/images/Ace_Favicon.png}" />
+
+</head>
+
+<style>
+body {
+	background-color: #F5F7FF;
+}
+
+.auth-form-light {
+	background-color: #FFFFFF;
+	margin: 0 auto;
+	padding: 40px;
+	max-width: 500px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+	font-weight: bold;
+}
+
+#description, #responsibilities, #requirements, #preferences {
+	height: auto;
+	transition: height 0.2s;
+	resize: none;
+}
+
+.dropdown-toggle::after {
+	content: none;
+}
+
+.custom-dropdown .dropdown-menu {
+	position: absolute;
+	transform: translate3d(0, -100%, 0);
+	min-width: 100%; /* Ensures full width */
+}
+
+.dropdown.show.over-table .dropdown-menu {
+	position: absolute !important;
+	z-index: 1000;
+}
+</style>
+
+<body>
+	<div class="container-scroller">
+		<div th:replace="fragments/topbar :: topbar"></div>
+		<div class="page-body-wrapper">
+			<div th:replace="fragments/sidebar :: sidebar"></div>
+			<div class="main-panel">
+				<div class="content-wrapper">
+				<!-- Success Alert -->
+					<div th:if="${reopenSuccess}"
+						class="alert alert-success alert-dismissible fade show"
+						role="alert" id="successAlert">
+						New vacancy posted successfully!
+						<button type="button" class="close" data-dismiss="alert"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<!-- Success Alert -->
+					<div class="card">
+						<div class="card-body">
+							<div id="messageContainer"></div>
+							<h4 class="card-title"
+								style="padding-bottom: 5px; border-bottom: 2px solid #ccc;">Vacancy
+								List</h4>
+							<div class="mb-3 mt-3">
+								<div class="d-flex align-items-center">
+									<div class="d-flex align-items-center mr-3">
+										<label class="mr-2"
+											style="font-family: sans-serif; font-weight: normal; margin-top: 1%;">Status:</label>
+										<select id="statusFilter" class="custom-select">
+											<option value="All">All</option>
+											<option value="Active">Active</option>
+											<option value="Inactive">Inactive</option>
+											<option value="Urgent">Urgent</option>
+											<option value="Reopen">Reopen</option>
+										</select>
+									</div>
+									<div class="d-flex align-items-center mr-3">
+										<label class="mr-2"
+											style="font-family: sans-serif; font-weight: normal; margin-top: 1%;">Department:</label>
+										<select id="departmentSort" class="custom-select"></select>
+									</div>
+									<div class="d-flex align-items-center">
+										<label class="mr-2"
+											style="font-family: sans-serif; font-weight: normal; margin-top: 1%;">Position:</label>
+										<select id="positionSort" name="position"
+											class="custom-select"></select>
+									</div>
+									<button id="resetButton" type="button"
+										class="btn btn-secondary" style="margin: 1%;">Reset</button>
+								</div>
+								<div class="d-flex align-items-center mt-2">
+									<label class="mr-2"
+										style="font-family: sans-serif; font-weight: normal; margin-top: 1%;">From:</label>
+									<input type="date" id="startDateFrom" style="width: 150px;"
+										class="form-control mr-2"> <label for="endDateTo"
+										class="mr-2"
+										style="font-family: sans-serif; font-weight: normal; margin-top: 1%;">To:</label>
+									<input type="date" style="width: 150px;" id="endDateTo"
+										class="form-control mr-2"> <label
+										style="font-family: sans-serif; font-weight: normal; margin: 1%;">Interview Summary Download:
+										</label>
+									<button class="btn btn-success" id="excelReportButton">
+										<i title="Interview Summary Excel Report" class="far fa-file-excel"></i>
+									</button>
+									<button class="btn btn-danger" id="pdfReportButton">
+										<i title="Interview Summary PDF Report" class="far fa-file-pdf"></i>
+									</button>
+
+								</div>
+							</div>
+
+							<div class="table-responsive" style="min-height: 280.38px">
+								<table id="vacancyTable" class="table table-hover display"
+									cellspacing="0" width="100%">
+									<thead>
+										<tr>
+											<th>Position</th>
+											<th>Post</th>
+											<th>Start Date</th>
+											<th>End Date</th>
+											<th>Department</th>
+											<th>Status</th>
+											<th class="text-center">Actions</th>
+											<th class="text-center">Download</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- main panel end-->
+
+			<!-- Cancel Confirmation -->
+
+			<div id="confirmationModal" class="modal fade" tabindex="-1"
+				role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Confirmation</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<p>Are you sure you want to close this vacancy?</p>
+							<p>You cannot undo this action after confirmation.</p>
+						</div>
+
+						<div class="modal-footer">
+							<button type="button" class="btn btn-sm btn-secondary"
+								data-dismiss="modal">Cancel</button>
+							<button type="button" class="btn btn-sm btn-danger"
+								id="confirmDeleteBtn">Confirm</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Cancel Confirmation -->
+			<!-- Reopen Confirmation -->
+		<div id="reopeningModal" class="modal fade" tabindex="-1"
+				role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Confirmation</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<p>Please choose how you want to reopen this vacancy?</p>
+							<p class="text-danger">* Choosing <b>Reopen</b> will reopen the vacancy automatically with recent data.</p>
+						</div>
+
+						<div class="modal-footer">
+							<button type="button" class="btn btn-sm btn-secondary"
+								data-dismiss="modal">Cancel</button>
+							<button type="button" class="btn btn-sm btn-primary"
+								id="editReopenBtn">Edit & reopen</button>
+							<button type="button" class="btn btn-sm btn-primary"
+								id="confirmReopenBtn">Reopen</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Reopen Confirmation -->
+		</div>
+	</div>
+	<!-- plugins:js -->
+	<script th:src="@{/vendors/js/vendor.bundle.base.js}"></script>
+	<!-- endinject -->
+	<!-- Plugin js for this page -->
+	<script th:src="@{/vendors/chart.js/Chart.min.js}"></script>
+	<script th:src="@{/vendors/datatables.net/jquery.dataTables.js}"></script>
+	<script
+		th:src="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.js}"></script>
+	<!-- End plugin js for this page -->
+	<!-- inject:js -->
+	<script th:src="@{/js/off-canvas.js}"></script>
+	<script th:src="@{/js/hoverable-collapse.js}"></script>
+	<script th:src="@{/js/template.js}"></script>
+	<script th:src="@{/js/settings.js}"></script>
+	<script th:src="@{/js/todolist.js}"></script>
+	<!-- endinject -->
+	<!-- Custom js for this page-->
+	<script th:src="@{/js/dashboard.js}"></script>
+	<script th:src="@{/js/Chart.roundedBarCharts.js}"></script>
+	<!-- Stomp -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+	<!-- SockJS -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+	<!-- Stomp -->
+	<script th:src="@{/javascripts/web_socket.js}"></script>
+	<!-- Other scripts -->
+	<script th:src="@{/javascripts/vacancy_table.js}"></script>
+	<script th:src="@{/javascripts/data-table-config.js}"></script>
+	<!-- End custom js for this page-->
+</body>
+
+</html>

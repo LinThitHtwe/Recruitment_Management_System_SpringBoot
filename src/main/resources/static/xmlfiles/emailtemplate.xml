@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<emailTemplates>
+
+    <template>
+        <id>1</id>
+        <subject>Welcome to our platform!</subject>
+        <body>
+         <![CDATA[
+         <p>Welcome! An account has been created for you. Your user role is [role]. Your password is [password].</p>
+         ]]>
+        </body>
+    </template>
+    
+      <template>
+        <id>2</id>
+        <subject>Password Reset</subject>
+        <body>
+        <![CDATA[
+         <p>Your password reset code is [resetCode]. This code will expire in 15 minutes.</p>
+         ]]>
+        </body>
+    </template>
+    
+         <template>
+        <id>3</id>
+        <subject>Interview Invitation</subject>
+        <body>
+             <![CDATA[
+            <p>Interview Type    - In person</p>
+            <p>Date Setting      - From {StartDate} To {EndDate}</p>
+            <p>Time Setting      - From {StartTime} To {EndTime}</p>
+            <br>
+            <p>Dear {HonourablePrefix} {CandidateName}</p>
+            <p>Welcome from ACE Data Systems Ltd. We would like to invite you for an interview at {Location} to get to know you more. Appointment is on <b>[AppointmentDate]</b>, <b>[AppointmentDay]</b>, from <b>[AppointmentStartTime]</b> to <b>[AppointmentEndTime]</b>.</p>
+            <p>We look forward to speaking with you.</p>
+            <br>
+            <p>Best Regards</p>
+            ]]>
+        </body>
+    </template>
+    
+     <template>
+        <id>4</id>
+        <subject>Online Interview Invitation</subject>
+        <body>
+             <![CDATA[
+            <p>Interview Type    - Online</p>
+            <p>Date Setting      - From {StartDate} To {EndDate}</p>
+            <p>Time Setting      - From {StartTime} To {EndTime}</p>
+            <br>
+            <p>Dear {HonourablePrefix} {CandidateName}</p>
+            <p>Welcome from ACE Data Systems Ltd. We would like to invite you for an interview at Zoom Meeting for interview to get to know you more. Appointment is on <b>[AppointmentDate]</b>, <b>[AppointmentDay]</b>, from <b>[AppointmentStartTime]</b> to <b>[AppointmentEndTime]</b>. Please join below the zoom link. Thanks.</p>
+            <p>Note.... We want you to be in good condition during the interview with good internet and a quiet environment.</p>
+            <p>Join Zoom Meeting</p>
+            <p><b>[ZoomURL]</b></p>
+            <p>Meeting ID: <b>[MeetingID]</b></p>
+            <p>Passcode: <b>[MeetingPasscode]</b></p>
+            <br>
+            <p>Best Regards</p>
+            ]]>
+        </body>
+    </template>
+    
+         <template>
+        <id>5</id>
+        <subject>Job Offer</subject>
+        <body>
+          <![CDATA[
+          <p>Dear {HonourablePrefix} {CandidateName}</p>
+          <br>
+          <p>We are pleased to inform you that you are appointed as {Position} in {Department} of ACE Data Systems Ltd. Please see your entitlement information detail and brief HR rule of company in below.</p>
+          <br>
+          <p><b><u>Entitlement Pay Information</u></b></p><br>
+          <p>Joined Start Date		-<b>[JoinedStartDate]</b></p>
+          <p>Position				-{Position}</p>
+          <p>Basic Pay				-<b>[BasicPay]</b> MMK</p>
+          <p>Project Allowance		-<b>[ProjectAllowance]</b> MMk</p>
+          <p>Meal + Transportation Allowance -<b>[MealTransportAllowanceDay]</b> *(Working Days per Month)= Normally <b>[MealTransportAllowanceMonth]</b> MMK</p>
+          <br>
+          <p><b><u>Note for probation period</u></b></p>
+          <br>
+          <p>*After probation and if you are selected, you must work minimum 2 years contract at ACE</p>
+          <p>*If you wish to resign in violation of within 2 years Agreement, you must give three months' notice and your two months’ current net salary must be refunded.</p>
+          <p>*No leaves are entitled in the probation period.</p>
+          <p>*Any leave must be informed in advance by phone.</p>
+          <p>*You must inform us 1 month in advance to resign.</p>
+          <p>*ACE will inform you 1 month in advance if we want to terminate.</p>
+          <p>*You must learn all technical knowledge required by project(.NET, Java or any other technologies)</p>
+   		  <br>
+   		  <p><b><u>HR Rule of Company (Brief)</u></b></p>
+   		  <br>
+   		  <p>(1) Working Hour	:From {StartWorkingHour} To {EndWorkingHour}</p>
+   		  <p>					:From {StartWorkingDay} To {EndWorkingDay} (Except gazette holidays)</p>
+   		  <br>
+   		  <p>(2) Leave Entitlement (After probation period)</p>
+   		  <p>a. Earn Leave		:<b>[EarnLeave]</b> days per year after one year service history (Need to apply one month in advance)</p>
+   		  <p>b. Casual Leave	:<b>[CasualLeave]</b> days per year after probation period (Maximum 3 days per Month)</p>
+   		  <p>c. Medical Leave	:<b>[MedicatlLeave]</b> days per year (With approved medical certification)</p>
+   		  <br>
+   		  <p>(3) Resignation after Employment Period</p>
+   		  <p>a. The employee shall give not less than three months written notice to the Employer for his/her resignation.</p>
+   		  <p>b. In case the employee for any reason, leave the services of the Company before the agreement period then employee shall pay 3 times of the current net salary.</p>
+   		  <br>
+   		  <p>(4) Confidentiality</p>
+   		  <p>a. The employee agrees not to disclose any of Company’s confidential information, Company’s trademarks or knowledge pertaining to the business of the Company during or after the employment.</p>
+   		  <br>
+   		  <p>Best Regards</p>
+   		  
+          ]]>
+        </body>
+    </template>
+
+</emailTemplates>

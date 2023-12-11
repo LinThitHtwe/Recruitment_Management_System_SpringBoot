@@ -1,0 +1,30 @@
+# Spring Boot
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# IDE files
+.idea/
+*.iml
+*.ipr
+*.iws
+*.classpath
+*.project
+*.settings/
+
+# Gradle files
+.gradle/
+build/
+
+# Logs
+logs/
+*.log
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Compiled binary
+/bin/
+
+# Dependency directories
+build-out/

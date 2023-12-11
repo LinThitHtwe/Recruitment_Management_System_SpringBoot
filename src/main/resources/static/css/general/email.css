@@ -1,0 +1,245 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600);
+
+* {
+	margin:0;
+	padding:0;
+	box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-webkit-font-smoothing:antialiased;
+	-moz-font-smoothing:antialiased;
+	-o-font-smoothing:antialiased;
+	font-smoothing:antialiased;
+	text-rendering:optimizeLegibility;
+}
+
+#sidebar {
+	width: 300px; /* Set the width of the sidebar as per your preference */
+	background-color: #F9F9F9;
+	padding: 20px;
+}
+
+#sidebar form {
+	display: flex;
+	flex-direction: column;
+}
+
+.form-control {
+	margin-bottom: 10px;
+	padding: 5px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+/* Optional: You can add more styling to make the form look better */
+#sidebar label {
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+#sidebar input[type="number"],
+#sidebar input[type="date"],
+#sidebar input[type="time"],
+#sidebar input[type="url"],
+#sidebar input[type="text"] {
+	width: 100%;
+}
+
+#sidebar input[type="number"] {
+	width: 100%; /* Adjust the width as needed */
+}
+
+#sidebar input[type="date"],
+#sidebar input[type="time"] {
+	width: 100%; /* Adjust the width as needed */
+}
+
+
+
+.container {
+	font-family:"Open Sans", Helvetica, Arial, sans-serif;
+	max-width:400px;
+	width:100%;
+	margin:0 auto;
+	position:relative;
+}
+
+#sendMailForm input[type="text"], #sendMailForm input[type="email"], #sendMailForm input[type="tel"], #sendMailForm input[type="url"], #sendMailForm textarea, #sendMailForm .email-btn { font:400 12px/16px "Open Sans", Helvetica, Arial, sans-serif; }
+
+#sendMailForm {
+	background:#F9F9F9;
+	padding:25px;
+	margin:50px 0;
+	margin-top:15px;
+	margin-right:0;
+	border-radius:14px;
+}
+
+#sendMailForm h3 {
+	color: #F96;
+	display: block;
+	font-size: 30px;
+	font-weight: 400;
+    padding:10px;
+    padding-left:0;
+    padding-top:0;
+}
+
+#sample-btn{
+	cursor:pointer;
+	width:15%;
+	border:none;
+	border-radius:4px;
+	background:#0CF;
+	color:#FFF;
+	margin:0 0 3px;
+	padding:7px;
+	font-size:14px;
+}
+
+#sample-btn:hover{
+	background:#09C;
+	-webkit-transition:background 0.3s ease-in-out;
+	-moz-transition:background 0.3s ease-in-out;
+	transition:background-color 0.3s ease-in-out;
+}
+
+fieldset {
+	border: medium none !important;
+	margin: 0 0 10px;
+	min-width:100%;
+	padding: 0;
+	width: 100%;
+    
+}
+
+fieldset label{
+	font-size:15px;
+	font-weight:400;
+	color:#400040;
+	padding-top:15px;
+}
+
+#sendMailForm input[type="text"], #sendMailForm input[type="email"], #sendMailForm input[type="tel"], #sendMailForm input[type="url"], #sendMailForm textarea {
+	width:100%;
+	border:1px solid #CCC;
+	border-radius:4px;
+	background:#FFF;
+	margin:0 0 5px;
+	padding:10px;
+    font-size:14px;
+}
+
+#sendMailForm input[type="text"]:hover, #sendMailForm input[type="email"]:hover, #sendMailForm input[type="tel"]:hover, #sendMailForm input[type="url"]:hover, #sendMailForm textarea:hover {
+	-webkit-transition:border-color 0.3s ease-in-out;
+	-moz-transition:border-color 0.3s ease-in-out;
+	transition:border-color 0.3s ease-in-out;
+	border:1px solid #AAA;
+}
+
+#sendMailForm textarea {
+	height:600px;
+	max-width:100%;
+    resize:none;
+}
+
+#sendMailForm .email-btn {
+	cursor:pointer;
+	width:15%;
+	border:none;
+	background:#0CF;
+	color:#FFF;
+	margin:0 0 5px;
+	padding:12px;
+	font-size:15px;
+    display:inline-block;
+}
+
+#sendMailForm .email-btn:hover {
+	background:#09C;
+	-webkit-transition:background 0.3s ease-in-out;
+	-moz-transition:background 0.3s ease-in-out;
+	transition:background-color 0.3s ease-in-out;
+}
+
+#sendMailForm .email-btn:active { box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.5); }
+
+#sendMailForm input:focus, #sendMailForm textarea:focus {
+	outline:0;
+	border:1px solid #999;
+}
+::-webkit-input-placeholder {
+ color:#888;
+}
+:-moz-placeholder {
+ color:#888;
+}
+::-moz-placeholder {
+ color:#888;
+}
+:-ms-input-placeholder {
+ color:#888;
+}
+
+.spinner {
+	--t: 2500ms;
+	--animation: rotate var(--t) linear infinite;
+	--animation2: scale var(--t) linear infinite alternate;
+	position: relative;
+	width: 10rem;
+	height: 10rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	animation: var(--animation), var(--animation2);
+}
+
+.spinner::before,
+.spinner::after {
+	content: '';
+	position: absolute;
+}
+
+.spinner::before {
+	inset: 0;
+	border: 3px solid turquoise;
+	border-radius: 50%;
+	mask-image: conic-gradient(transparent 10%, black);
+	animation: borderScale var(--t) linear infinite alternate;
+}
+
+.spinner::after {
+	--r: 45deg;
+	--scale: 2;
+	width: 20%;
+	height: 20%;
+	background: 
+		radial-gradient(circle at 30% 35%, white 3px, transparent 0),
+		radial-gradient(circle at 70% 35%, white 3px, transparent 0),
+		radial-gradient(circle at top center, white 6px, transparent 0),
+		turquoise;
+	background-position: 0 0, 0 0, 0 1.25rem;
+	top: 0;
+	translate: 0 -50%;
+	rotate: 45deg;
+	animation: var(--animation) reverse, var(--animation2);
+	border-radius: 20%;
+}
+
+@keyframes rotate {
+	to {
+		rotate: calc(360deg + var(--r, 0deg));
+	}
+}
+
+@keyframes scale {
+	to {
+		scale: var(--scale, 0.5);
+	}
+}
+
+@keyframes borderScale {
+	to {
+		border: 6px solid turquoise;
+	}
+}

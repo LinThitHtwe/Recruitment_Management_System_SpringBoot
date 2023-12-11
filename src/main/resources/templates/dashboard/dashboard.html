@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Ace Data System</title>
+<!-- plugins:css -->
+<link rel="stylesheet" th:href="@{/vendors/feather/feather.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet" th:href="@{/vendors/css/vendor.bundle.base.css}">
+<!-- endinject -->
+<!-- Plugin css for this page -->
+<link rel="stylesheet"
+	th:href="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet" type="text/css"
+	href="@{/js/select.dataTables.min.css}">
+<!-- End plugin css for this page -->
+<!-- inject:css -->
+<link rel="stylesheet" th:href="@{/css/vertical-layout-light/style.css}">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<!-- endinject -->
+<link rel="shortcut icon" th:href="@{/images/Ace_Favicon.png}" />
+<style>
+/* Styling for the dropdown container */
+.dropdown {
+	display: inline-block;
+	margin: 10px; /* Adjust margin as needed */
+}
+
+/* Styling for the label */
+label {
+	display: block;
+	margin-bottom: 5px; /* Adjust margin as needed */
+	font-weight: bold;
+}
+
+/* Styling for the select element */
+select {
+	padding: 5px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	width: 200px;
+	background-color: white;
+	color: #333;
+	cursor: pointer;
+}
+
+/* Styling for the disabled and selected option */
+select option[disabled][selected], select option[selected] {
+	font-style: italic;
+}
+
+/* Styling for the default selected option */
+select option[selected] {
+	font-weight: bold;
+}
+
+.chartDiv {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.dataChart {
+	margin: 10px;
+	height: 450px;
+}
+</style>
+</head>
+
+
+<body>
+	<!-- min year of vacancy -->
+	<input type="number" id="minYear" th:value="${minYear}" hidden>
+
+	<div class="container-scroller">
+		<div th:replace="fragments/topbar :: topbar"></div>
+		<div class="page-body-wrapper">
+			<div th:replace="fragments/sidebar :: sidebar"></div>
+			<div class="main-panel">
+				<div class="content-wrapper">
+					<div class="row">
+						<div class="col-md-12 grid-margin">
+							<div class="row">
+								<div class="col-12 col-xl-8 mb-4 mb-xl-0">
+									<h3 class="font-weight-bold">Welcome!</h3>
+								</div>
+								<div class="col-12 col-xl-4">
+									<div class="justify-content-end d-flex">
+										<div class="dropdown flex-md-grow-1 flex-xl-grow-0">
+											<div>
+												<b>Year:</b> <select id="year" name="year">
+													<option value="" disabled selected>Select Year</option>
+													<option value="0" selected>All</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6 mb-4 stretch-card transparent">
+							<div class="card card-tale">
+								<div class="card-body">
+									<p class="mb-4">Total Vacancies</p>
+									<p class="mb-2" id="totalVacancies" style="font-size: 21px"></p>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 mb-4 stretch-card transparent">
+							<div class="card card-dark-blue">
+								<div class="card-body">
+									<p class="mb-4">Active Vacancies</p>
+									<p class="mb-2" id="activeAndUrgentVacancies"
+										style="font-size: 21px"></p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6 mb-4 mb-lg-0 stretch-card transparent">
+							<div class="card card-light-blue">
+								<div class="card-body">
+									<p class="mb-4">Total Candidates</p>
+									<p class="mb-2" id="totalCandidates" style="font-size: 21px"></p>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 stretch-card transparent">
+							<div class="card card-light-danger">
+								<div class="card-body">
+									<p class="mb-4">Employed Candidates</p>
+									<p class="mb-2" id="employedCandidates" style="font-size: 21px"></p>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
+					<!-- bar chart for position and vacancies per department and time start -->
+					<div class="chartDiv card">
+						<div class="mt-3 text-center">
+							<h3 style="font-weight: bold;">Vacancy Chart with
+								Department</h3>
+						</div>
+						<div class="row ml-2 mt-2">
+							<div class="col-md-6 row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="departmentSelect">Department</label> <select
+											id="departmentSelect" name="departmentSelect">
+											<option value="" disabled selected>Select Department</option>
+											<option value="0" selected>All</option>
+											<option th:each="department : ${departmentListForChart}"
+												th:value="${department.id}" th:text="${department.name}"></option>
+										</select>
+									</div>
+								</div>
+
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="yearSelect1">Year</label> <select id="yearSelect1"
+											name="yearSelect1">
+											<option value="" disabled selected>Select Year</option>
+											<option value="0" selected>All</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+							<div class="form-group" id="monthDiv1">
+							<label for="monthSelect1">Month</label> <select id="monthSelect1"
+								name="monthSelect1">
+								<option value="" disabled selected>Select Month</option>
+								<option value="0" selected>All</option>
+								<option value="1">January</option>
+								<option value="2">February</option>
+								<option value="3">March</option>
+								<option value="4">April</option>
+								<option value="5">May</option>
+								<option value="6">June</option>
+								<option value="7">July</option>
+								<option value="8">August</option>
+								<option value="9">September</option>
+								<option value="10">October</option>
+								<option value="11">November</option>
+								<option value="12">December</option>
+							</select>
+						</div>
+							</div>
+						</div>
+
+						<div class="dataChart">
+							<canvas id="VacanciesFilterByDepartmentAndTime"></canvas>
+						</div>
+					</div>
+					<!-- bar chart for position and vacancies per department and time start -->
+
+					<!-- bar chart for position and vacancies per department and time start -->
+					<div class="chartDiv card">
+						<div class="mt-3 text-center">
+							<h3 style="font-weight: bold;">Vacancy Chart with
+								Position</h3>
+						</div>
+						<div class="row ml-2 mt-2">
+							<div class="col-md-6 row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="positionSelect">Position</label> <select
+											id="positionSelect" name="positionSelect">
+											<option value="" disabled selected>Select Position</option>
+											<option value="0" selected>All</option>
+											<option th:each="position : ${positionListForChart}"
+												th:value="${position.id}" th:text="${position.name}"></option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="yearSelect2">Year</label> <select id="yearSelect2"
+											name="yearSelect2">
+											<option value="" disabled selected>Select Year</option>
+											<option value="0" selected>All</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6"><div class="form-group" id="monthDiv2">
+							<label for="monthSelect2">Month</label> <select id="monthSelect2"
+								name="monthSelect2">
+								<option value="" disabled selected>Select Month</option>
+								<option value="0" selected>All</option>
+								<option value="1">January</option>
+								<option value="2">February</option>
+								<option value="3">March</option>
+								<option value="4">April</option>
+								<option value="5">May</option>
+								<option value="6">June</option>
+								<option value="7">July</option>
+								<option value="8">August</option>
+								<option value="9">September</option>
+								<option value="10">October</option>
+								<option value="11">November</option>
+								<option value="12">December</option>
+							</select>
+						</div></div>
+						</div>
+
+						
+
+
+						<div class="dataChart">
+							<canvas id="VacanciesFilterByPositionAndTime"></canvas>
+						</div>
+					</div>
+					<!-- bar chart for position and vacancies per department and time start -->
+
+					<!-- line chart for position demand by years start -->
+					<div class="chartDiv card">
+						<div class="mt-3 text-center">
+							<h3 style="font-weight: bold;">Position Demand Trend By Year</h3>
+						</div>
+						<div class="row ml-2 mt-3">
+							<div class="col-md-6 row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<b>From:</b> <select id="startYearSelect1"
+											style="width: 160px">
+											<option value="" disabled selected>Select Start Year</option>
+										</select>
+									</div>
+								</div>
+
+								<div class="col-md-6">
+									<div class="form-group" >
+										<b id="endYearPositionTrendLabel">To:</b> <select id="endYearSelect1" style="width: 160px">
+											<option value="" disabled selected>Select End Year</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6"> </div>
+						</div>
+
+						<div class="dataChart">
+							<canvas id="PositionDemandByYears"></canvas>
+						</div>
+					</div>
+					<!-- line chart for position demand by years end -->
+
+					<!-- bar chart for candidate count by vacancy status start -->
+					<div class="chartDiv card">
+						<div class="mt-3 text-center">
+							<h3 style="font-weight: bold;">Candidate Chart for Active/Urgent
+								Vacancies with Department</h3>
+						</div>
+						<div class="row ml-2 mt-2">
+							<div class="col-md-6 row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="departmentSelect2">Department</label> <select
+											id="departmentSelect2" name="departmentSelect2">
+											<option value="" disabled selected>Select Department</option>
+											<option value="0" selected>All</option>
+											<option th:each="department : ${departmentListForChart}"
+												th:value="${department.id}" th:text="${department.name}"></option>
+										</select>
+									</div>
+								</div>
+
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="urgentStatus"> </label> <input type="checkbox"
+											name="urgentStatus" id="urgentStatus" value="1"><b> Urgent</b>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6"> </div>
+						</div>
+
+
+
+						<div class="dataChart">
+							<canvas id="CandidateCountByVacancyStatus"></canvas>
+						</div>
+					</div>
+					<!-- bar chart for candidate count by vacancy status end -->
+
+					<!-- bar chart for position and candidate count per department and time start -->
+					<div class="chartDiv card">
+						<div class="mt-3 text-center">
+							<h3 style="font-weight: bold;">Candidate Chart
+								with Department</h3>
+						</div>
+						<div class="row ml-2 mt-2">
+							<div class="col-md-6 row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="departmentSelect3">Department</label> <select
+											id="departmentSelect3" name="departmentSelect3">
+											<option value="" disabled selected>Select Department</option>
+											<option value="0" selected>All</option>
+											<option th:each="department : ${departmentListForChart}"
+												th:value="${department.id}" th:text="${department.name}"></option>
+										</select>
+									</div>
+								</div>
+
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="yearSelect3">Year</label> <select id="yearSelect3"
+											name="yearSelect3">
+											<option value="" disabled selected>Select Year</option>
+											<option value="0" selected>All</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6"><div class="form-group" id="monthDiv3">
+							<label for="monthSelect3">Month</label> <select id="monthSelect3"
+								name="monthSelect3">
+								<option value="" disabled selected>Select Month</option>
+								<option value="0" selected>All</option>
+								<option value="1">January</option>
+								<option value="2">February</option>
+								<option value="3">March</option>
+								<option value="4">April</option>
+								<option value="5">May</option>
+								<option value="6">June</option>
+								<option value="7">July</option>
+								<option value="8">August</option>
+								<option value="9">September</option>
+								<option value="10">October</option>
+								<option value="11">November</option>
+								<option value="12">December</option>
+							</select>
+						</div>
+							</div>
+						</div>
+
+						
+
+						<div class="dataChart">
+							<canvas id="candidateCountPerDepartmentAndTime"></canvas>
+						</div>
+					</div>
+					<!-- bar chart for position and candidate count per department and time end -->
+
+					<!-- line chart for candidate count per position by years start -->
+					<div class="chartDiv card">
+						<div class="mt-3 text-center">
+							<h3 style="font-weight: bold;">Candidate Trend By Year</h3>
+						</div>
+						<div class="row ml-2 mt-3">
+							<div class="col-md-6 row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<b>From:</b> <select id="startYearSelect2"
+											style="width: 160px">
+											<option value="" disabled selected>Select Start Year</option>
+										</select>
+									</div>
+								</div>
+
+								<div class="col-md-6">
+									<div class="form-group">
+										<b id="endYearCandidateTrendLabel">To:</b> <select id="endYearSelect2" style="width: 160px">
+											<option value="" disabled selected>Select End Year</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6"> </div>
+						</div>
+
+						<div class="dataChart">
+							<canvas id="CandidatePerPositionLineChart"></canvas>
+						</div>
+					</div>
+					<!-- line chart for candidate count per position by years end -->
+
+					<!-- doughnut chart for candidate count per status start -->
+					<div class="chartDiv card">
+						<div class="mt-3 text-center">
+							<h3 style="font-weight: bold;">Candidate Status Chart for
+								Vacancy</h3>
+						</div>
+						<div class="row ml-2 mt-2">
+							<div class="col-md-6 row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="positionSelect2">Position</label> <select
+											id="positionSelect2" name="positionSelect2">
+											<option value="" disabled selected>Select Position</option>
+											<option value="0" selected>All</option>
+											<option th:each="position : ${positionListForChart}"
+												th:value="${position.id}" th:text="${position.name}"></option>
+										</select>
+									</div>
+								</div>
+
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="vacancySelect">Vacancy</label> <select
+											id="vacancySelect" name="vacancySelect">
+											<option value="" disabled selected>Select Vacancy</option>
+											<option value="0" selected>All</option>
+											<option></option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6"> </div>
+						</div>
+
+
+						<div id="doughnutChartNoDataMessage" class="alert alert-danger"
+							role="alert"
+							style="display: none; width: 300px; margin: auto; display: flex; align-items: center; justify-content: center; margin-top: 30px">
+
+						</div>
+
+						<div>
+							<canvas id="CandidatesPerStatusDoughnutChart"></canvas>
+						</div>
+					</div>
+
+
+					<!-- doughnut chart for candidate count per status end -->
+
+				</div>
+			</div>
+		</div>
+		<!-- main panel end-->
+
+
+
+	</div>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<!-- plugins:js -->
+	<script th:src="@{/vendors/js/vendor.bundle.base.js}"></script>
+	<!-- endinject -->
+	<!-- Plugin js for this page -->
+	<script th:src="@{/vendors/datatables.net/jquery.dataTables.js}"></script>
+	<script
+		th:src="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.js}"></script>
+	<script th:src="@{/js/dataTables.select.min.js}"></script>
+
+	<!-- End plugin js for this page -->
+	<!-- inject:js -->
+	<script th:src="@{/js/off-canvas.js}"></script>
+	<script th:src="@{/js/hoverable-collapse.js}"></script>
+	<script th:src="@{/js/template.js}"></script>
+	<script th:src="@{/js/settings.js}"></script>
+	<script th:src="@{/js/todolist.js}"></script>
+	<!-- endinject -->
+	<!-- Custom js for this page-->
+	<script th:src="@{/js/dashboard.js}"></script>
+	<script th:src="@{/javascripts/chart.js}"></script>
+	<!-- Stomp -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+	<!-- SockJS -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+	<!-- Stomp -->
+	<script th:src="@{/javascripts/web_socket.js}"></script>
+	<!-- End custom js for this page-->
+</body>
+
+
+</html>

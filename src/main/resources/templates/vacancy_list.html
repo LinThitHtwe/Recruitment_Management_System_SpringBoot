@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Job Lists</title>
+
+<link rel="stylesheet" th:href="@{/vendors/feather/feather.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet" th:href="@{/vendors/css/vendor.bundle.base.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet" type="text/css"
+	th:href="@{/js/select.dataTables.min.css}">
+<link rel="stylesheet" th:href="@{/css/vertical-layout-light/style.css}">
+<link rel="stylesheet" th:href="@{/css/home.css}">
+<link rel="shortcut icon" th:href="@{/images/Ace_Favicon.png}" />
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" th:href="@{/css/vacancyListCandidate.css}">
+<style>
+.hidden-card {
+	display: none;
+}
+</style>
+</head>
+
+<body>
+	<div class="container-scroller">
+		<!-- partial:partials/_navbar.html -->
+		<nav class="navbar col-sm-12 col-12 p-0 fixed-top d-flex "
+			th:fragment="nav">
+			<div
+				class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+				<a class="navbar-brand brand-logo mr-5" th:href="@{/}"><img
+					th:src="@{/images/ACEDataSystemFull.jpg}" alt="logo" /></a> <a
+					class="navbar-brand brand-logo-mini" th:href="@{/}"><img
+					th:src="@{/images/ACEDataSystemFull.jpg}" alt="logo" /></a>
+			</div>
+
+			<div
+				class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+				
+				<ul class="navbar-nav navbar-nav-right">
+
+					<li class="navbar-nav mr-sm-2"><a
+						class="nav-item text-decoration-none" th:href="@{/}">
+							<button class="btn btn-light btn-sm hide-on-phone">Home</button>
+					</a> <a class="nav-item text-decoration-none"
+						th:href="@{/candidate/jobs}"><button
+								class="btn btn-light btn-sm">Jobs</button></a> <a
+						class="nav-item text-decoration-none"
+						th:href="@{/candidate/about}"><button
+								class="btn btn-light btn-sm">About</button></a></li>
+				</ul>
+				<button
+					class="navbar-toggler navbar-toggler-right d-lg-none align-self-center"
+					type="button" data-toggle="offcanvas">
+					<span class="icon-menu"></span>
+				</button>
+
+			</div>
+		</nav>
+		<!-- navbar-end -->
+		<div class="container-fluid page-body-wrapper">
+
+			<!-- sidebar -->
+			<nav class="sidebar sidebar-offcanvas" id="sidebar"
+				th:fragment="sidebar">
+
+				<ul class="nav">
+					<li class="custom-card"><a th:href="@{/candidate/jobs}"
+						class="nav-link btn no-underline all-text"
+						th:text="${'All ( '+vacancies.size+' )'}"> </a></li>
+					<li class="nav-item"><a class="nav-link"
+						data-toggle="collapse" data-target="#vacancy-position"
+						aria-expanded="false" aria-controls="vacancy"> <span
+							class="menu-title">Positions</span><i class="menu-arrow"></i>
+
+					</a>
+						<div id="vacancy-position" class="collapse"
+							aria-labelledby="vacancy-heading">
+							<ul class="nav flex-column sub-menu">
+								<th:block
+									th:each="position : ${vacancyCountsByPosition.keySet()}">
+									<li class="nav-item"><a
+										th:href="@{/candidate/filter-by-position/{position}(position = ${position.name})}"
+										th:text="${position.name+' ( ' + vacancyCountsByPosition.get(position) + ' )'}"
+										class="nav-link"></a></li>
+								</th:block>
+							</ul>
+						</div></li>
+					<li class="nav-item"><a class="nav-link"
+						data-toggle="collapse" data-target="#vacancy-type"
+						aria-expanded="false" aria-controls="vacancy"> <span
+							class="menu-title">Types</span><i class="menu-arrow"></i>
+					</a>
+						<div id="vacancy-type" class="collapse"
+							aria-labelledby="vacancy-heading">
+							<ul class="nav flex-column sub-menu">
+								<th:block th:each="type : ${uniqueVacancyTypes.keySet()}">
+									<li class="nav-item"><a
+										th:href="@{/candidate/filter-by-type/{type}(type = ${type})}"
+										th:text="${type+' ( ' + uniqueVacancyTypes.get(type) + ' )'}"
+										class="nav-link"></a></li>
+								</th:block>
+							</ul>
+						</div></li>
+					<!-- ------------------------------------------------------- -->
+					<li class="nav-item"><a class="nav-link"
+						data-toggle="collapse" data-target="#vacancy-department"
+						aria-expanded="false" aria-controls="vacancy"> <span
+							class="menu-title">Departments</span> <i class="menu-arrow"></i>
+					</a>
+						<div id="vacancy-department" class="collapse"
+							aria-labelledby="vacancy-heading">
+							<ul class="nav flex-column sub-menu">
+								<th:block
+									th:each="department : ${vacancyCountsByDepartment.keySet()}">
+									<li class="nav-item"><a
+										th:href="@{/candidate/filter-by-department/{department}(department = ${department.name})}"
+										th:text="${department.name+' (' + vacancyCountsByDepartment.get(department) + ')'}"
+										class="nav-link"></a></li>
+								</th:block>
+							</ul>
+						</div></li>
+
+				</ul>
+			</nav>
+
+			<div class="main-panel">
+				<div class="content-wrapper">
+
+					<div class="row">
+						<div class="col-md-5">
+							<div>
+								<label><input type="checkbox"
+									th:checked="${urgentFilter}" onchange="applyFilter(this)">
+									Urgent Only</label>
+							</div>
+						</div>
+
+						<div class="col-md-4"></div>
+						<div class="col-md-3">
+							<nav aria-label="Page navigation">
+								<ul class="pagination">
+									<li class="page-item"
+										th:classappend="${vacancyPage.first ? 'disabled' : ''}"><a
+										class="page-link"
+										th:href="@{/candidate/jobs(page=${vacancyPage.number - 1})}">Previous</a>
+									</li>
+									<th:block
+										th:each="page : ${#numbers.sequence(vacancyPage.number - 1, vacancyPage.number + 1)}"
+										th:if="${page >= 0 and page < vacancyPage.totalPages}">
+										<li class="page-item"
+											th:classappend="${vacancyPage.number == page ? 'active' : ''}">
+											<a class="page-link"
+											th:href="@{/candidate/jobs(page=${page})}"
+											th:text="${page + 1}"></a>
+										</li>
+									</th:block>
+									<li class="page-item"
+										th:classappend="${vacancyPage.last ? 'disabled' : ''}"><a
+										class="page-link"
+										th:href="@{/candidate/jobs(page=${vacancyPage.number + 1})}">Next</a>
+									</li>
+								</ul>
+							</nav>
+						</div>
+					</div>
+					<div th:if="${vacancyPage.empty}">
+						<h4 class="mb-0">No active vacancy available right now.</h4>
+					</div>
+					<div th:each="vacancyItem : ${vacancyPage}" class="vacancyInfo">
+						<span class="dueDateValue" hidden='true'
+							th:value="${vacancyItem.dueDate}"
+							th:text="${vacancyItem.dueDate}"></span>
+						<div class="card position-card">
+							<div
+								class="card-header d-flex justify-content-between align-items-center">
+								<h4 class="positionValue"
+									th:if="${vacancyItem.position != null}"
+									th:text="${vacancyItem.position.name}"></h4>
+								<div class="d-flex align-items-center">
+									<span class="text-small text-success days-difference mr-2"></span>
+									<h4 th:unless="${vacancyItem.position != null}" class="mb-0">No
+										vacancy available right now.</h4>
+								</div>
+							</div>
+							<div class="pl-4">
+								<span class="badge rounded-pill badge-info typeValue"
+									th:text="*{vacancyItem.type}" th:value="*{vacancyItem.type}"></span>
+								<span th:if="${vacancyItem.urgent==true}"
+									class="badge rounded-pill badge-primary urgentValue">Urgent</span>
+							</div>
+							<div class="card-body row">
+								<div class="tags text-green" style="width: 160px">
+									<div>
+										<i class="far fa-building text-info"></i> <span
+											th:text="${vacancyItem.department.name}"></span>
+									</div>
+								</div>
+								<div class="tags" style="width: 175px">
+									<div>
+										<i class="ti-location-pin text-info"></i> <span
+											th:text="*{vacancyItem.department.address}"></span>
+									</div>
+								</div>
+								<div class="tags text-green hide-on-phone" style="width: 175px">
+									<div>
+										<i class="ti-wallet text-info"></i> <span
+											th:text="*{vacancyItem.salary}"></span>
+									</div>
+								</div>
+							</div>
+							<div class="card-footer">
+								<div class="row">
+									<div class="col">
+										<span><i class="ti-user text-sm text-info"></i> <span
+											class="text-post" th:text="*{vacancyItem.count + ' Posts'}"></span></span>
+									</div>
+									<div class="col text-right">
+										<a
+											th:href="@{/candidate/vacancy-info/{id}(id = ${vacancyItem.id})}"
+											class="btn btn-detail btn-sm">Detail</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-5"></div>
+						<div class="col-md-4"></div>
+						<div class="col-md-3">
+							<nav aria-label="Page navigation">
+								<ul class="pagination">
+									<li class="page-item"
+										th:classappend="${vacancyPage.first ? 'disabled' : ''}"><a
+										class="page-link"
+										th:href="@{/candidate/jobs(page=${vacancyPage.number - 1})}">Previous</a>
+									</li>
+									<th:block
+										th:each="page : ${#numbers.sequence(vacancyPage.number - 1, vacancyPage.number + 1)}"
+										th:if="${page >= 0 and page < vacancyPage.totalPages}">
+										<li class="page-item"
+											th:classappend="${vacancyPage.number == page ? 'active' : ''}">
+											<a class="page-link"
+											th:href="@{/candidate/jobs(page=${page})}"
+											th:text="${page + 1}"></a>
+										</li>
+									</th:block>
+									<li class="page-item"
+										th:classappend="${vacancyPage.last ? 'disabled' : ''}"><a
+										class="page-link"
+										th:href="@{/candidate/jobs(page=${vacancyPage.number + 1})}">Next</a>
+									</li>
+								</ul>
+							</nav>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<footer class="footer light" style="color: black;">
+			<div
+				class="d-sm-flex justify-content-center justify-content-sm-between">
+				<span class=" text-center text-sm-left d-block d-sm-inline-block">
+					<span style="font-size: 1rem;"> <i
+						class="fa-solid fa-envelope"></i> info@acedatasystems.com
+				</span> <span class="d-block d-sm-inline-block"
+					style="font-size: 1rem; position: relative; left: 1rem;"> <i
+						class="fa-solid fa-square-phone"></i> <span
+						style="font-size: .8rem;">95-1-652239</span>
+				</span><br> © 2023 All rights reserved by <a href="acedatasystems.com"
+					target="_blank" style="color: #3e73b5;">Ace Data Systems</a> Ltd.
+				</span> <span
+					class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Contact-Us.<br>
+					<span style="font-size: 1rem;"> <a
+						href="https://www.facebook.com/acedatasystems"
+						style="color: #3e73b5;"><i
+							class="fa-brands fa-square-facebook"></i></a> <span
+						style="position: relative; left: .3rem;"><a
+							href="https://acedatasystems.com/" style="color: #3e73b5;"><i
+								class="fa-brands fa-chrome"></i></a></span>
+				</span>
+				</span>
+			</div>
+		</footer>
+
+
+	</div>
+	<!-- Add jQuery library -->
+	<!-- Add jQuery library -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script>
+	<script th:src="@{/vendors/js/vendor.bundle.base.js}"></script>
+	<!-- endinject -->
+	<!-- Plugin js for this page -->
+	<script th:src="@{/vendors/chart.js/Chart.min.js}"></script>
+	<script th:src="@{/vendors/datatables.net/jquery.dataTables.js}"></script>
+	<script
+		th:src="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.js}"></script>
+	<script th:src="@{/js/dataTables.select.min.js}"></script>
+
+	<!-- End plugin js for this page -->
+	<!-- inject:js -->
+	<script th:src="@{/js/off-canvas.js}"></script>
+	<script th:src="@{/js/hoverable-collapse.js}"></script>
+	<script th:src="@{/js/template.js}"></script>
+	<script th:src="@{/js/settings.js}"></script>
+	<script th:src="@{/js/todolist.js}"></script>
+	<!-- endinject -->
+	<!-- Custom js for this page-->
+	<script th:src="@{/js/dashboard.js}"></script>
+	<script th:src="@{/js/Chart.roundedBarCharts.js}"></script>
+	<script th:src="@{/javascripts/candidate_vacancy_list.js}"></script>
+	<!-- End custom js for this page-->
+	<script th:inline="javascript">
+		function applyFilter(checkbox) {
+			var url = new URL(window.location.href);
+			url.searchParams.set('urgent', checkbox.checked); // Toggle the value here
+			window.location.href = url.toString();
+		}
+	</script>
+
+</body>
+
+</html>
