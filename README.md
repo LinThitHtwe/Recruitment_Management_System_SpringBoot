@@ -67,8 +67,23 @@ Default Admin can execute all tasks within the admin role, with the added permis
 All roles have access to an overall chart 📈 and can review replied emails 📧, except for Department Heads and Interviewers.
 
 
-# How to Run the App
+# Project Screenshots
 
+Here are some screenshots from the project
+
+### Client Side
+
+#### Home Page
+![Home Page](/docs/client/home_page.jpg)
+
+#### All Jobs List
+![All Jobs List](/docs/client/all_jobs_list.jpg)
+
+#### Vacancy Detail
+![Vacancy Detail](/docs/client/vacany_detail.jpg)
+
+#### Job Apply Form
+![Job Apply Form](/docs/client/job_apply_modalbox.jpg)
 
 ## Congratulations! :tada:
 
