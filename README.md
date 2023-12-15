@@ -2,10 +2,10 @@
 
 Collaborating on an on-the-job training project, our team comprises four members:
 
-- [@LinThit27](https://github.com/LinThit27) 👨‍💻
-- [@shinewwaihtun](https://github.com/shinewwaihtun) 👨‍💻
-- [@myapwintkhine-developer](https://github.com/myapwintkhine-developer) 👩‍💻
-- [@YeYint3424](https://github.com/YeYint3424) 👨‍💻
+- [LinThit27](https://github.com/LinThit27) 👨‍💻
+- [shinewwaihtun](https://github.com/shinewwaihtun) 👨‍💻
+- [myapwintkhine-developer](https://github.com/myapwintkhine-developer) 👩‍💻
+- [YeYint3424](https://github.com/YeYint3424) 👨‍💻
 
 ## Project Overview 🚀
 
