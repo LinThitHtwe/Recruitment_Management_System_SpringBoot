@@ -2,10 +2,9 @@
 
 Collaborating on an on-the-job training project, [our award-winning team](https://www.facebook.com/photo/?fbid=700428785459921&set=a.668811361954997) comprises four members:
 
-- [LinThit27](https://github.com/LinThit27) 👨‍💻
-- [shinewwaihtun](https://github.com/shinewwaihtun) 👨‍💻
-- [myapwintkhine-developer](https://github.com/myapwintkhine-developer) 👩‍💻
-- [YeYint3424](https://github.com/YeYint3424) 👨‍💻
+| ![LinThit27](https://github.com/LinThit27.png) | ![shinewwaihtun](https://github.com/shinewaitun.png) | ![myapwintkhine-developer](https://github.com/myapwintkhine-developer.png) | ![YeYint3424](https://github.com/YeYint3424.png) |
+|:---:|:---:|:---:|:---:|
+| [LinThit27](https://github.com/LinThit27)  | [shinewwaihtun](https://github.com/shinewaitun)  | [myapwintkhine-developer](https://github.com/myapwintkhine-developer)  | [YeYint3424](https://github.com/YeYint3424)  |
 
 ## Tools Used in the Project 🛠️
 
